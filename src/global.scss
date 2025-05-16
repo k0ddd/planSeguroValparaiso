@@ -1,0 +1,68 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+/*@import '@ionic/angular/css/palettes/dark.system.css'; */
+
+.leaflet-control-geosearch {
+  top: 10px !important;       /* espacio desde arriba del mapa */
+  left: 10px !important;      /* espacio desde izquierda */
+  right: auto !important;     /* para evitar conflicto */
+  width: 300px !important;    /* ancho fijo como ion-searchbar */
+  border-radius: 8px;
+  background: #f4f5f8;        /* color fondo similar ion-searchbar */
+  font-family: "San Francisco", "Roboto", "Helvetica Neue", sans-serif;
+  font-size: 15px;
+}
+
+.leaflet-control-geosearch input {
+  height: 36px !important;
+  border-radius: 8px !important;
+  padding-left: 12px !important;
+  font-size: 14px !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  width: 100% !important;
+}
+
+:root {
+  --page-background: #232323; // Cambia este color por el que desees como fondo global
+}
+
+ion-content {
+  --background: var(--page-background);
+  background: var(--page-background) !important;
+}

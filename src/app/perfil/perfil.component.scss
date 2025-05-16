@@ -1,0 +1,43 @@
+ion-icon {
+  font-size: 24px;
+  color: #ffffff;
+}
+
+ion-header {
+  background: #3F5EFB;
+  background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);  
+}
+
+
+ion-tab-bar {
+  background: #3F5EFB;
+  background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);  --ion-tab-bar-background: transparent; 
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px; 
+  padding: 10px; 
+}
+
+.perfil-card{
+  margin: 0;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.avatar-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.avatar-icon {
+  width: 80px;
+  height: 80px;
+}
+
+.reportes{
+    background: #8296ff;
+  background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgb(255, 122, 148) 100%);
+  color: #ffffff;
+  border-radius: 10px;
+  --background: none;
+} 

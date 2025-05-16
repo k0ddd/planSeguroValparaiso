@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Plan Valparaiso ss</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="page-background">
+  <ion-header collapse="condense" translucent>
+    <ion-toolbar>
+      <ion-title size="large" class="fuente">
+        <span class="plan-text">Plan</span>
+        <span class="valparaiso-text"> Valparaíso</span>
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card class="fuente">
+    <ion-card-header>
+      <p>No te preocupes, te ayudaremos a recuperarla.
+        Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p>
+      <ion-card-title>
+        <h1>¿Tienes problemas para iniciar sesión?
+        </h1>
+      </ion-card-title>  
+    </ion-card-header>
+    
+    <ion-card-content>
+      <ion-item>
+        <ion-input label="Correo Electronico" label-placement="floating" fill="solid" class="Fuente" [(ngModel)]="correo" type="text" placeholder="Ingresa un email válido"></ion-input>    
+      </ion-item>
+        <ion-button expand="block" class="fuente">Enviar enlace de inicio de sesión</ion-button>
+      <br>
+      <div class="enlaces-login">
+        <a routerLink="/registro">¿No tienes una cuenta? Regístrate</a>
+        <a routerLink="/login">Volver al inicio de sesión</a>
+     </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+ 

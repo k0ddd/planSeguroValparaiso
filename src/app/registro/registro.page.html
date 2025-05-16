@@ -1,0 +1,71 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      <span class="plan-text">Plan</span>
+      <span class="valparaiso-text"> Valparaíso</span>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="page-background">
+  <ion-card class="fuente">
+    <ion-card-header>
+      <p>Regístrate en unos pocos pasos para comenzar a usar la aplicación.
+        Solo necesitamos algunos datos básicos para crear tu cuenta.</p>
+      <ion-card-title>
+        <h1>¿Aún no tienes una cuenta?</h1>
+      </ion-card-title>  
+    </ion-card-header>
+    
+    <ion-card-content>
+      <ion-item>
+        <ion-input 
+          label="Nombre Completo" 
+          label-placement="floating" 
+          fill="solid" 
+          class="Fuente" 
+          [(ngModel)]="nombre" 
+          type="text" 
+          placeholder="Ingresa tu nombre completo">
+        </ion-input>    
+      </ion-item>
+      <ion-item>
+        <ion-input 
+          label="Correo Electrónico" 
+          label-placement="floating" 
+          fill="solid" 
+          class="Fuente" 
+          [(ngModel)]="correo" 
+          type="email" 
+          placeholder="Ingresa un email válido">
+        </ion-input>    
+      </ion-item>
+      <ion-item>
+        <ion-input 
+          label="Contraseña" 
+          label-placement="floating" 
+          fill="solid" 
+          class="Fuente" 
+          [(ngModel)]="contrasena" 
+          type="password" 
+          placeholder="Ingresa tu contraseña">
+        </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-input 
+          label="Teléfono" 
+          label-placement="floating" 
+          fill="solid" 
+          class="Fuente" 
+          [(ngModel)]="telefono" 
+          type="tel" 
+          placeholder="Ingresa tu número de teléfono">
+        </ion-input>
+      </ion-item>
+      <ion-button expand="block" (click)="registrar()">Registrar</ion-button>
+      <div class="enlaces-login">
+        <a routerLink="/login">¿Ya tienes una cuenta? Inicia sesión</a>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

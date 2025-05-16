@@ -1,0 +1,110 @@
+.page-background {
+    --background: linear-gradient(to bottom right, #fff89a, #ffb5e8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+    height: 100%;
+  }
+  
+  ion-card {
+    background: transparent;
+    box-shadow: none;
+    width: 100%;
+    max-width: 360px;
+    padding: 16px;
+  }
+  
+  ion-card-header p {
+    font-size: 14px;
+    color: #000;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  
+  ion-title{
+    text-align: center;
+  }
+  ion-card-title h1 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #000;
+    text-align: center;
+    margin: 0;
+  }
+  
+  ion-label {
+    color: #000 !important;
+    font-weight: 500;
+  }
+  
+  ion-input {
+    color: #000 !important;
+    padding-left: 8px;
+  }
+  
+  ::placeholder {
+    color: #000 !important;
+  }
+  
+  ion-item {
+    --background: #ffffffaa; /* leve fondo blanco translúcido */
+    border-radius: 12px;
+    margin-top: 12px;
+    padding: 4px;
+  }
+  
+  ion-button {
+    --background: #333;
+    --color: white;
+    margin-top: 20px;
+    border-radius: 10px;
+    font-weight: bold;
+    width: 100%;
+  }
+  
+  .fuente {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+  
+  .enlaces-login {
+    margin-top: 16px;
+    text-align: center;
+  
+    a {
+      display: block;
+      color: #007bff;
+      text-decoration: none;
+      margin: 8px 0;
+      font-size: 14px;
+      font-weight: 500;
+    }
+  
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+  
+  ion-header,
+  ion-toolbar {
+    --background: transparent;
+    --ion-color-base: transparent;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+  }
+  
+  ion-header::after,
+  ion-toolbar::after {
+    background: none !important;
+    border: none !important;
+  }
+  
+  .plan-text {
+    color: #9b4dca; /* Morado */
+  }
+  
+  .valparaiso-text {
+    color: #000000; /* Negro */
+  }
+  

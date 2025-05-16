@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Bienvenido</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <div class="map-container">
+    <div id="map"></div>
+
+    <!-- Formulario que aparece encima del mapa -->
+    <ion-card *ngIf="mostrarFormulario" class="formulario-reporte">
+      <ion-card-header>
+        <ion-card-title>Detalles del Reporte</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <form [formGroup]="reporteForm" (ngSubmit)="onSubmit()">
+          <!-- Form fields aquí -->
+          <ion-item>
+            <ion-label position="stacked">Tipo de Incidente</ion-label>
+            <ion-select formControlName="tipo" placeholder="Selecciona el tipo de incidente">
+              <ion-select-option value="robo">Robo</ion-select-option>
+              <ion-select-option value="accidente">Accidente</ion-select-option>
+              <ion-select-option value="incendio">Incendio</ion-select-option>
+              <ion-select-option value="violencia">Violencia</ion-select-option>
+              <ion-select-option value="otro">Otro</ion-select-option>
+            </ion-select>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Descripción del Incidente</ion-label>
+            <ion-textarea formControlName="descripcion" placeholder="Escribe tu comentario aquí..." rows="4"></ion-textarea>
+          </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Ubicación del Incidente</ion-label>
+            <ion-input formControlName="ubicacion" placeholder="Ubicación actual" type="text" readonly></ion-input>
+          </ion-item>
+          <ion-button expand="full" type="submit" class="btnReporte">Enviar Reporte</ion-button>
+        </form>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+  <!-- Botón flotante fijo -->
+  <div class="floating-button">
+    <ion-button expand="block" class="boton" (click)="toggleFormulario()">Reportar</ion-button>
+  </div>
+</ion-content>

@@ -1,0 +1,101 @@
+#container {
+  text-align: center;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1; /* Asegúrate de que no esté cubriendo otros elementos */
+}
+
+ion-header {
+  background: #3F5EFB;
+  background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);  
+}
+
+ion-tab-bar {
+  background-color: #f8f8f8;
+}
+
+ion-icon {
+  font-size: 24px;
+  color: #ffffff;
+}
+
+
+ion-tab-bar {
+  background: #3F5EFB;
+  background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%); 
+ --ion-tab-bar-background: transparent; 
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px; 
+  padding: 10px; 
+}
+
+.negro-icono {
+  color: black;
+}
+
+.map-container {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 1px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.floating-button {
+  position: fixed; /* Cambia a relativo para que respete el flujo del contenido */
+  margin-top: 16px;   /* Agrega un margen superior para separarlo del mapa */
+  bottom: 75px;
+  left: 16px;         /* Margen izquierdo */
+  right: 16px;        /* Margen derecho */
+  z-index: 10;        /* Asegúrate de que esté por encima de otros elementos */
+}
+
+ion-card-content {
+  padding: 0; 
+}
+
+.boton {
+  background: #3F5EFB;
+  background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+  color: #ffffff;
+  border-radius: 10px;
+  --background: none;
+}
+
+.btnReporte{
+  background: #8296ff;
+  background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgb(255, 122, 148) 100%);
+  color: #ffffff;
+  border-radius: 10px;
+  --background: none;
+}
+
+/* Formulario reporte: aparece sobre el mapa, centrado y con un max width */
+.formulario-reporte {
+  position: fixed;
+  top: 40%;
+  left: 46%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px;
+  z-index: 10;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  padding: 0;
+}
+

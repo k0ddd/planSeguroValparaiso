@@ -1,0 +1,29 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-title>Bienvenido</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+<ion-content class="fondo-blanco">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Perfil de Usuario</ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="perfil-card">
+      <div class="avatar-container">
+<ion-avatar class="avatar-icon">
+  <img src="https://www.w3schools.com/howto/img_avatar.png" alt="Avatar de usuario">
+</ion-avatar>
+
+      </div>
+      <p>Nombre: {{usuario.nombre}}</p>
+      <p>Correo: {{usuario.correo}}</p>
+    </ion-card-content>
+  </ion-card>
+
+  <div>
+  <ion-button expand="block" class="reportes" (click)="verMisReportes()">Reportes Creados</ion-button>
+  </div>
+
+  <ion-button class="ion-padding" color="danger" (click)="cerrarSesion()">Cerrar Sesión</ion-button>
+</ion-content>

@@ -1,0 +1,67 @@
+ion-header {
+    background: #3F5EFB;
+    background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);  
+  }
+
+ion-card {
+    margin: 16px; /* Agrega un margen para separar las tarjetas */
+    border-radius: 10px; /* Mantén las esquinas redondeadas */
+    box-shadow: 0px 4px 6px rgba(11, 11, 11, 0.566); /* Sombreado suave */
+    background-color: #ffffff; /* Asegúrate de que el fondo sea blanco */
+  }
+  
+ion-textarea {
+    margin-top: 8px;
+  }
+  
+img {
+  display: block; /* Asegura que las imágenes sean visibles */
+  margin: 8px auto; /* Centra las imágenes horizontalmente */
+  max-width: 100%; /* Asegura que no excedan el ancho del contenedor */
+  height: 350px; /* Define una altura máxima para las imágenes */
+  border-radius: 8px; /* Esquinas redondeadas */
+  object-fit: cover; /* Ajusta la imagen para llenar el contenedor sin distorsión */
+}
+
+.btnReportar {
+  position: fixed; /* Fija el botón en la pantalla */
+  bottom: 75px; /* Aumenta la distancia desde la parte inferior */
+  right: 30px; /* Distancia desde la parte derecha */
+  z-index: 100; /* Asegúrate de que esté por encima de otros elementos */
+  width: 52px; /* Tamaño del botón */
+  height: 52px; /* Tamaño del botón */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #8296ff;
+  background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgb(255, 122, 148) 100%);
+  color: #ffffff;
+  border-radius: 10px;
+  --background: none;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Sombra para destacar el botón */
+}
+
+.btnReporte{
+    background: #8296ff;
+  background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgb(255, 122, 148) 100%);
+  color: #ffffff;
+  border-radius: 10px;
+  --background: none;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+
+
+.header-container ion-button {
+  margin: 0;
+  padding: 0;
+  --padding-start: 0;
+  --padding-end: 0;
+  color: #740000;
+}

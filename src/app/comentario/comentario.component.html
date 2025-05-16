@@ -1,0 +1,69 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Bienvenido</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <!-- Formulario para ingresar reporte -->
+  <ion-card *ngIf="mostrarFormulario" style="padding-bottom: 56px;">
+    <ion-card-header>
+      <ion-card-title>Detalles del Reporte</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="reporteForm" (ngSubmit)="onSubmit()">
+        <ion-item>
+          <ion-label position="stacked">Tipo de Incidente</ion-label>
+          <ion-select formControlName="tipo" placeholder="Selecciona el tipo de incidente">
+            <ion-select-option value="robo">Robo</ion-select-option>
+            <ion-select-option value="accidente">Accidente</ion-select-option>
+            <ion-select-option value="incendio">Incendio</ion-select-option>
+            <ion-select-option value="violencia">Violencia</ion-select-option>
+            <ion-select-option value="otro">Otro</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Descripción del Incidente</ion-label>
+          <ion-textarea formControlName="descripcion" placeholder="Escribe tu comentario aquí..." rows="4"></ion-textarea>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Ubicación del Incidente</ion-label>
+          <ion-input formControlName="ubicacion" placeholder="Ingresa la ubicación (ej: Calle 123, Ciudad)" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Subir Imagen (opcional)</ion-label>
+          <ion-input type="file" (change)="onFileChange($event)" accept="image/*"></ion-input>
+        </ion-item>
+
+        <ion-button expand="full" type="submit" class="btnReporte">Enviar Reporte</ion-button>
+      </form>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Reportes ya enviados -->
+  <ion-card *ngFor="let reporte of reportes" style="padding-bottom: 56px;">
+<ion-card-header>
+  <div class="header-container">
+    <ion-card-title>{{ reporte.tipo }}</ion-card-title>
+    <ion-button fill="clear" (click)="eliminarReporte(reporte._id)">
+      <ion-icon name="trash-outline"></ion-icon>
+    </ion-button>
+  </div>
+</ion-card-header>
+    <ion-card-content>
+      <p><strong>Ubicación:</strong> {{ reporte.ubicacion }}</p>
+      <p><strong>Descripción:</strong> {{ reporte.descripcion }}</p>
+      <p *ngIf="reporte.imagen"><strong>Imagen del incidente:</strong></p>
+      <img *ngIf="reporte.imagen" [src]="reporte.imagen" alt="Imagen incidente" style="width: 100%; border-radius: 8px;">
+    </ion-card-content>
+
+  </ion-card>
+  <ion-button class="btnReportar" (click)="toggleFormulario()">
+    <ion-icon name="megaphone-outline" style="font-size: 35px;"></ion-icon>
+  </ion-button>
+
+</ion-content>
