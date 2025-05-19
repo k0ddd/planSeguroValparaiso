@@ -77,6 +77,8 @@ L.Icon.Default.mergeOptions({
   ],
 })
 export class HomePage implements OnInit {
+  usuario: any;
+  correo: string = '';
   private map: any;
   private heatLayer: any; // ✅ Declaración aquí
   mostrarFormulario = false;
@@ -105,6 +107,7 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
+      this.usuario = this.authService.getUsuario();
       console.log('HomePage inicializado'); // Solo para debug
     this.initMap();
   }
