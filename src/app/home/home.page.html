@@ -45,4 +45,22 @@
   <div class="floating-button">
     <ion-button expand="block" class="boton" (click)="toggleFormulario()">Reportar</ion-button>
   </div>
+
+<!-- Botón de seleccionar idioma -->
+<div class="language-selector" [class.abierto]="menuAbierto">
+  <button class="language-button" (click)="toggleIdiomas()">
+    <img src="assets/flags/es.svg" alt="Español" class="flag-icon">
+  </button>
+
+  <div class="language-options" *ngIf="menuAbierto">
+    <div class="language-option">
+      <img src="assets/flags/es.svg" alt="Español" class="flag-icon"> Español
+    </div>
+    <div class="language-option">
+      <img src="assets/flags/en.svg" alt="Inglés" class="flag-icon"> English
+    </div>
+  </div>
+</div>
+
+
 </ion-content>

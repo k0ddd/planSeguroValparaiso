@@ -77,6 +77,7 @@ L.Icon.Default.mergeOptions({
   ],
 })
 export class HomePage implements OnInit {
+  menuAbierto = false;
   usuario: any;
   correo: string = '';
   private map: any;
@@ -121,6 +122,10 @@ export class HomePage implements OnInit {
   toggleMenu() {
     this.menu.toggle();
   }
+
+  toggleIdiomas() {
+    this.menuAbierto = !this.menuAbierto;
+  } 
 
 private obtenerGradientePorTipo(tipo: string) {
   switch (tipo.toLowerCase()) {
@@ -269,6 +274,8 @@ const searchControl = new SearchControlClass({
     }, 500);
   }
 
+  
+
   // 🔴 NUEVO: Generar zonas de calor como círculos para evitar
   private generarZonasDeCalor(): L.Circle[] {
     const zonas: L.Circle[] = [];
@@ -353,6 +360,8 @@ private trazarRuta(origen: L.LatLng, destino: L.LatLng) {
     }
     return false;
   }
+
+
 
   toggleFormulario() {
     this.mostrarFormulario = !this.mostrarFormulario;
