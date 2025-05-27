@@ -21,10 +21,6 @@ export const routes: Routes = [
         loadComponent: () => import('./comentario/comentario.component').then(m => m.ComentarioComponent),
       },
       {
-        path: 'camara',
-        loadComponent: () => import('./camara/camara.component').then(m => m.CamaraComponent),
-      },
-      {
         path: 'perfil',
         loadComponent: () => import('./perfil/perfil.component').then(m => m.PerfilComponent),
       },
