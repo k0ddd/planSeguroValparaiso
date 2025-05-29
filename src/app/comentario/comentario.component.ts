@@ -14,6 +14,7 @@ import {
   chatboxEllipsesOutline, cameraOutline, reorderFourOutline, optionsOutline, megaphoneOutline, trash,
   trashOutline
 } from 'ionicons/icons';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-comentario',
@@ -33,7 +34,7 @@ export class ComentarioComponent implements OnInit {
   reportes: any[] = [];
   imagenSeleccionada: File | null = null;
 
-  constructor(private fb: FormBuilder, private reporteService: ReporteService) {
+  constructor(private fb: FormBuilder, private reporteService: ReporteService,  private alertController: AlertController) {
     this.reporteForm = this.fb.group({
       tipo: [''],
       descripcion: [''],
@@ -97,16 +98,41 @@ onSubmit() {
     });
   }
   eliminarReporte(id: string) {
-  this.reporteService.eliminarReporte(id).subscribe({
-    next: () => {
-      this.reportes = this.reportes.filter(r => r._id !== id);
-      console.log('Reporte eliminado correctamente');
-    },
-    error: (error: any) => {
-      console.error('Error al eliminar reporte:', error);
-    }
-  });
-}
-}
+    this.reporteService.eliminarReporte(id).subscribe({
+      next: () => {
+        this.reportes = this.reportes.filter(r => r._id !== id);
+        console.log('Reporte eliminado correctamente');
+      },
+      error: (error: any) => {
+        console.error('Error al eliminar reporte:', error);
+      }
+    });
+  }
 
+  async abrirOpcionesReporte(reporte: any) {
+    const alert = await this.alertController.create({
+      header: '¿Qué deseas reportar de este contenido?',
+      inputs: [
+        { name: 'spam', type: 'radio', label: 'Spam', value: 'spam' },
+        { name: 'sexual', type: 'radio', label: 'Contenido sexual o explícito', value: 'sexual' },
+        { name: 'ofensivo', type: 'radio', label: 'Contenido ofensivo', value: 'ofensivo' }
+      ],
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Reportar',
+          handler: (tipo) => {
+            this.enviarReporteInadecuado(reporte, tipo);
+          }
+        }
+      ]
+    });
 
+    await alert.present();
+  }
+
+  enviarReporteInadecuado(reporte: any, tipo: string) {
+    console.log('Contenido reportado:', reporte, 'Motivo:', tipo);
+    // Aquí podrías enviar el reporte a tu backend o mostrar un mensaje de éxito
+  }
+}
