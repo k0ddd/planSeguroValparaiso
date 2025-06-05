@@ -11,10 +11,16 @@ import { ReporteService } from '../services/reporte.service';
 import { addIcons } from 'ionicons';
 import {
   personOutline, homeOutline, settingsOutline,
-  chatboxEllipsesOutline, cameraOutline, reorderFourOutline, optionsOutline, megaphoneOutline, trash,
-  trashOutline
+  chatboxEllipsesOutline, cameraOutline, reorderFourOutline, optionsOutline,
+  megaphoneOutline, trashOutline, flagOutline, warningOutline
 } from 'ionicons/icons';
 import { AlertController } from '@ionic/angular';
+
+addIcons({
+  personOutline, homeOutline, settingsOutline,
+  chatboxEllipsesOutline, cameraOutline, reorderFourOutline, optionsOutline,
+  megaphoneOutline, trashOutline, flagOutline, warningOutline
+});
 
 @Component({
   selector: 'app-comentario',

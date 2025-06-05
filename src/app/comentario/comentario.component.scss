@@ -15,21 +15,21 @@ ion-textarea {
   }
   
 img {
-  display: block; /* Asegura que las imágenes sean visibles */
-  margin: 8px auto; /* Centra las imágenes horizontalmente */
-  max-width: 100%; /* Asegura que no excedan el ancho del contenedor */
-  height: 350px; /* Define una altura máxima para las imágenes */
-  border-radius: 8px; /* Esquinas redondeadas */
-  object-fit: cover; /* Ajusta la imagen para llenar el contenedor sin distorsión */
+  display: block; 
+  margin: 8px auto; 
+  max-width: 100%; 
+  height: 350px; 
+  border-radius: 8px; 
+  object-fit: cover; 
 }
 
 .btnReportar {
-  position: fixed; /* Fija el botón en la pantalla */
-  bottom: 75px; /* Aumenta la distancia desde la parte inferior */
-  right: 30px; /* Distancia desde la parte derecha */
-  z-index: 100; /* Asegúrate de que esté por encima de otros elementos */
-  width: 52px; /* Tamaño del botón */
-  height: 52px; /* Tamaño del botón */
+  position: fixed; 
+  bottom: 75px; 
+  right: 30px; 
+  z-index: 100; 
+  width: 52px; 
+  height: 52px; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,12 +56,16 @@ img {
   width: 100%;
 }
 
+.header-buttons {
+  display: flex;
+  gap: 6px;
+}
 
 
-.header-container ion-button {
+.header-buttons ion-button {
   margin: 0;
   padding: 0;
-  --padding-start: 0;
-  --padding-end: 0;
-  color: #740000;
+  --padding-start: 4px;
+  --padding-end: 4px;
+  color: var(--ion-color-danger); /* Color correcto de Ionic */
 }
