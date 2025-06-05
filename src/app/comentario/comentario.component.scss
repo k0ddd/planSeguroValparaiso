@@ -48,7 +48,6 @@ img {
   border-radius: 10px;
   --background: none;
 }
-
 .header-container {
   display: flex;
   justify-content: space-between;
@@ -56,12 +55,15 @@ img {
   width: 100%;
 }
 
+.header-buttons {
+  display: flex;
+  gap: 6px;
+}
 
-
-.header-container ion-button {
+.header-buttons ion-button {
   margin: 0;
   padding: 0;
-  --padding-start: 0;
-  --padding-end: 0;
-  color: #740000;
+  --padding-start: 4px;
+  --padding-end: 4px;
+  color: var(--ion-color-danger); /* Color correcto de Ionic */
 }

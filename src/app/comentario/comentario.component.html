@@ -46,14 +46,19 @@
 
   <!-- Reportes ya enviados -->
   <ion-card *ngFor="let reporte of reportes" style="padding-bottom: 56px;">
-<ion-card-header>
-  <div class="header-container">
-    <ion-card-title>{{ reporte.tipo }}</ion-card-title>
-    <ion-button fill="clear" (click)="eliminarReporte(reporte._id)">
-      <ion-icon name="trash-outline"></ion-icon>
-    </ion-button>
-  </div>
-</ion-card-header>
+  <ion-card-header>
+    <div class="header-container">
+      <ion-card-title>{{ reporte.tipo }}</ion-card-title>
+      <div class="header-buttons">
+        <ion-button fill="clear" (click)="eliminarReporte(reporte._id)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" color="danger" (click)="abrirOpcionesReporte(reporte)">
+          <ion-icon name="flag-outline"></ion-icon>
+        </ion-button>
+      </div>
+    </div>
+  </ion-card-header>
     <ion-card-content>
       <p><strong>Ubicación:</strong> {{ reporte.ubicacion }}</p>
       <p><strong>Descripción:</strong> {{ reporte.descripcion }}</p>
