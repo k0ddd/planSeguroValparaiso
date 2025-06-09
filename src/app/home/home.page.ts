@@ -8,10 +8,8 @@ import 'leaflet-routing-machine';
 
 import { ReporteService } from '../services/reporte.service';
 
-// 🔍 Importa el control de búsqueda
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
-// Ionic standalone components
 import {
   IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonIcon, IonCardTitle, IonCardHeader, IonCard, IonCardContent, IonItem, IonLabel, IonSelect, IonSelectOption, IonTextarea, IonInput, IonSearchbar, IonTabButton, IonFooter, IonTabBar, IonTabs, IonMenu, MenuController
 } from '@ionic/angular/standalone';
@@ -22,7 +20,6 @@ import {
   cameraOutline, reorderFourOutline, optionsOutline,
   search
 } from 'ionicons/icons';
-// ... imports sin cambios ...
 interface HeatLayerFunction {
   (latlngs: [number, number, number][], options?: any): any;
 }
@@ -34,10 +31,6 @@ interface RoutingControlFunction {
 declare global {
   namespace L {
     const heatLayer: HeatLayerFunction;
-
-    namespace Routing {
-      const control: RoutingControlFunction;
-    }
   }
 }
 
@@ -110,8 +103,15 @@ export class HomePage implements OnInit {
   ngOnInit() {
       this.usuario = this.authService.getUsuario();
       console.log('HomePage inicializado'); // Solo para debug
-    this.initMap();
+      this.initMap();
+      this.obtenerUbicacionActual(); // 👈 Esto debe seguir estando
   }
+
+  ngAfterViewInit() {
+  this.usuario = this.authService.getUsuario();
+  this.initMap();
+  this.obtenerUbicacionActual();
+}
 
   cerrarSesion() {
     this.authService.eliminarToken();
@@ -126,6 +126,28 @@ export class HomePage implements OnInit {
   toggleIdiomas() {
     this.menuAbierto = !this.menuAbierto;
   } 
+
+
+
+
+  private async obtenerDireccionDesdeCoordenadas(lat: number, lng: number): Promise<string> {
+  const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data && data.display_name) {
+      return data.display_name;
+    } else {
+      return `${lat}, ${lng}`;
+    }
+  } catch (error) {
+    console.error('Error al obtener dirección:', error);
+    return `${lat}, ${lng}`;
+  }
+}
+
 
 private obtenerGradientePorTipo(tipo: string) {
   switch (tipo.toLowerCase()) {
@@ -308,26 +330,27 @@ const searchControl = new SearchControlClass({
     return false;
   }  
 
-// 🛣️ Modificado para evitar zonas de calor
 private trazarRuta(origen: L.LatLng, destino: L.LatLng) {
-  console.log('🧭 Trazando ruta desde:', origen, 'hasta:', destino); // <-- ESTE
+  console.log('🧭 Trazando ruta desde:', origen, 'hasta:', destino); 
 
   if (this.routingControl) {
     this.map.removeControl(this.routingControl);
-    console.log('🧹 Control de ruta anterior eliminado'); // <-- OPCIONAL
+    console.log('🧹 Control de ruta anterior eliminado'); 
   }
-
-  this.routingControl =  L.Routing.control({  // <-- con new
-    waypoints: [origen, destino],
+  
+const routingControl: any = L.Routing.control({
+  waypoints: [origen, destino],
   routeWhileDragging: true,
   showAlternatives: true,
 }).addTo(this.map);
+
+this.routingControl = routingControl;
 
   this.routingControl.on('routesfound', (e: any) => {
     const route = e.routes[0];
     const coordinates: L.LatLng[] = route.coordinates;
 
-    console.log('✅ Ruta encontrada con', coordinates.length, 'coordenadas'); // <-- ESTE
+    console.log('✅ Ruta encontrada con', coordinates.length, 'coordenadas'); 
 
     const zonasDeCalor = this.generarZonasDeCalor();
 
@@ -371,39 +394,47 @@ private trazarRuta(origen: L.LatLng, destino: L.LatLng) {
     }
   }
 
-  obtenerUbicacionActual() {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude;
-          const lng = position.coords.longitude;
-          const ubicacion = `${lat}, ${lng}`;
-          this.reporteForm.patchValue({ ubicacion });
+obtenerUbicacionActual() {
+  if (navigator.geolocation) {
+    console.log('Intentando obtener ubicación...');
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        console.log('Ubicación obtenida:', position);
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
 
-          // Agrega el punto al heatLayer del tipo seleccionado
-          const tipo = this.reporteForm.get('tipo')?.value || 'default';
-          if (!this.heatLayersByTipo[tipo]) {
-            const gradient = this.obtenerGradientePorTipo(tipo);
-            this.heatLayersByTipo[tipo] = L.heatLayer([], {
-              radius: 25,
-              blur: 15,
-              maxZoom: 17,
-              gradient
-            }).addTo(this.map);
-          }
-          this.heatLayersByTipo[tipo].addLatLng([lat, lng, 0.7]);
+        const direccion = await this.obtenerDireccionDesdeCoordenadas(lat, lng);
+        console.log('Dirección traducida:', direccion);
 
-          this.map.setView([lat, lng], 16);
-        },
-        (error) => {
-          console.error('Error obteniendo la ubicación:', error);
-          alert('No se pudo obtener la ubicación actual.');
+        this.reporteForm.patchValue({
+          ubicacion: direccion
+        });
+
+        const tipo = this.reporteForm.get('tipo')?.value || 'default';
+        if (!this.heatLayersByTipo[tipo]) {
+          const gradient = this.obtenerGradientePorTipo(tipo);
+          this.heatLayersByTipo[tipo] = L.heatLayer([], {
+            radius: 25,
+            blur: 15,
+            maxZoom: 17,
+            gradient
+          }).addTo(this.map);
         }
-      );
-    } else {
-      alert('La geolocalización no es compatible con este navegador.');
-    }
+        this.heatLayersByTipo[tipo].addLatLng([lat, lng, 0.7]);
+        this.map.setView([lat, lng], 16);
+      },
+      (error) => {
+        console.error('Error al obtener ubicación:', error);
+        alert('No se pudo obtener la ubicación actual.');
+      }
+    );
+  } else {
+    alert('La geolocalización no es compatible.');
   }
+}
+
+
+
 
   onSubmit() {
     if (this.reporteForm.valid) {
