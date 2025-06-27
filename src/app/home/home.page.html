@@ -16,16 +16,27 @@
       <ion-card-content>
         <form [formGroup]="reporteForm" (ngSubmit)="onSubmit()">
           <!-- Form fields aquí -->
-          <ion-item>
-            <ion-label position="stacked">Tipo de Incidente</ion-label>
-            <ion-select formControlName="tipo" placeholder="Selecciona el tipo de incidente">
-              <ion-select-option value="robo">Robo</ion-select-option>
-              <ion-select-option value="accidente">Accidente</ion-select-option>
-              <ion-select-option value="incendio">Incendio</ion-select-option>
-              <ion-select-option value="violencia">Violencia</ion-select-option>
-              <ion-select-option value="otro">Otro</ion-select-option>
-            </ion-select>
-          </ion-item>
+<ion-item>
+  <ion-label position="stacked">Tipo de Incidente</ion-label>
+  <ion-select
+    formControlName="tipo"
+    placeholder="Selecciona el tipo de incidente"
+    interface="popover"
+    (ionChange)="actualizarColor($event.detail.value)"
+  >
+    <ion-select-option value="robo">Robo</ion-select-option>
+    <ion-select-option value="accidente">Accidente</ion-select-option>
+    <ion-select-option value="incendio">Incendio</ion-select-option>
+    <ion-select-option value="violencia">Violencia</ion-select-option>
+    <ion-select-option value="otro">Otro</ion-select-option>
+  </ion-select>
+  <div
+    class="color-circle"
+    [ngStyle]="{ 'background-color': colorSeleccionado }"
+  ></div>
+</ion-item>
+
+
           <ion-item>
             <ion-label position="stacked">Descripción del Incidente</ion-label>
             <ion-textarea formControlName="descripcion" placeholder="Escribe tu comentario aquí..." rows="4"></ion-textarea>

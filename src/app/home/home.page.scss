@@ -9,8 +9,8 @@
 }
 
 ion-header {
-  background: #3F5EFB;
-  background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);  
+  background: #000000;
+  --background: linear-gradient(177deg,rgb(0, 0, 0) 0%, rgba(26, 26, 26, 1) 100%);
 }
 
 ion-tab-bar {
@@ -69,16 +69,16 @@ ion-card-content {
 }
 
 .boton {
-  background: #3F5EFB;
-  background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgba(252, 70, 107, 1) 100%);
+  background: #80ddd9;
+  background: linear-gradient(177deg,rgb(54, 54, 54) 0%, rgba(26, 26, 26, 1) 100%);
   color: #ffffff;
   border-radius: 10px;
   --background: none;
 }
 
 .btnReporte{
-  background: #8296ff;
-  background: linear-gradient(308deg, rgba(63, 94, 251, 1) 0%, rgb(255, 122, 148) 100%);
+    background: #80ddd9;
+    background: linear-gradient(177deg,rgb(54, 54, 54) 0%, rgba(26, 26, 26, 1) 100%);
   color: #ffffff;
   border-radius: 10px;
   --background: none;
@@ -156,5 +156,32 @@ ion-card-content {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+ion-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.color-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgba(0,0,0,0.4);
+  border: 1px solid #ccc;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 10px;
+  cursor: default;
+  vertical-align: middle;
+
+  position: relative;
+  top: -20px;
+  left: -30px;
+}
+
+.color-circle:hover {
+  transform: scale(1.2);
 }
 

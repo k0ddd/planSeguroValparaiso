@@ -1,5 +1,5 @@
 .page-background {
-    --background: linear-gradient(to bottom right, #fff89a, #ffb5e8);
+  --background: linear-gradient(177deg,rgba(255, 240, 240, 1) 0%, rgba(26, 26, 26, 1) 100%);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,7 +55,7 @@
   }
   
   ion-button {
-    --background: #333;
+  --background: #6ad4d0;
     --color: white;
     margin-top: 20px;
     border-radius: 10px;
@@ -73,7 +73,7 @@
   
     a {
       display: block;
-      color: #007bff;
+      color: #60a0cd;
       text-decoration: none;
       margin: 8px 0;
       font-size: 14px;
@@ -101,7 +101,7 @@
   }
   
   .plan-text {
-    color: #9b4dca; /* Morado */
+  color: #1ad8d2; /* Morado */
   }
   
   .valparaiso-text {

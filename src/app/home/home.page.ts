@@ -11,7 +11,7 @@ import { ReporteService } from '../services/reporte.service';
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 
 import {
-  IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonIcon, IonCardTitle, IonCardHeader, IonCard, IonCardContent, IonItem, IonLabel, IonSelect, IonSelectOption, IonTextarea, IonInput, IonSearchbar, IonTabButton, IonFooter, IonTabBar, IonTabs, IonMenu, MenuController
+  IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonIcon, IonCardTitle, IonCardHeader, IonCard, IonCardContent, IonItem, IonLabel, IonSelect, IonSelectOption, IonTextarea, IonInput, IonSearchbar, IonTabButton, IonFooter, IonTabBar, IonTabs, IonMenu, MenuController, IonPopover, IonList
 } from '@ionic/angular/standalone';
 import { AuthService } from '../services/auth.service';
 import { addIcons } from 'ionicons';
@@ -67,9 +67,14 @@ L.Icon.Default.mergeOptions({
     IonTextarea,
     IonInput,
     IonSearchbar,
+    IonPopover,IonList
   ],
 })
 export class HomePage implements OnInit {
+  colorSeleccionado: string = 'transparent';
+  mostrarPopover = false;
+  tipoSeleccionado: string = '';
+
   menuAbierto = false;
   usuario: any;
   correo: string = '';
@@ -80,6 +85,39 @@ export class HomePage implements OnInit {
   private heatLayersByTipo: {[tipo: string]: any} = {}; // para guardar capas heatmap por tipo
   private ubicacionActual: L.LatLng | null = null; // 👈 Guardar ubicación actual
   private routingControl: any; // 👈 Control de ruta
+    actualizarColor(tipo: string) {
+    switch (tipo) {
+      case 'robo':
+        this.colorSeleccionado = 'rgba(255,0,0,1)';
+        break;
+      case 'accidente':
+        this.colorSeleccionado = 'rgba(0,0,255,1)';
+        break;
+      case 'incendio':
+        this.colorSeleccionado = 'rgba(255,80,0,1)';
+        break;
+      case 'violencia':
+        this.colorSeleccionado = 'rgba(128,0,128,1)';
+        break;
+      case 'otro':
+        this.colorSeleccionado = 'rgba(80,80,80,1)';
+        break;
+      default:
+        this.colorSeleccionado = 'transparent';
+    }
+  }
+
+  abrirPopover(ev: any) {
+  this.mostrarPopover = true;
+}
+
+  seleccionarTipo(tipo: string) {
+  this.tipoSeleccionado = tipo;
+  this.mostrarPopover = false;
+  this.actualizarColor(tipo);
+}
+
+
 
   constructor(
     private authService: AuthService,
@@ -93,6 +131,8 @@ export class HomePage implements OnInit {
       descripcion: [''],
       ubicacion: [''],
     });
+
+    
 
     addIcons({
       personOutline, homeOutline, settingsOutline,
@@ -475,3 +515,4 @@ obtenerUbicacionActual() {
     }
   }
 }
+
