@@ -75,7 +75,6 @@ export class HomePage implements OnInit {
   mostrarPopover = false;
   tipoSeleccionado: string = '';
 
-  menuAbierto = false;
   usuario: any;
   correo: string = '';
   private map: any;
@@ -162,10 +161,6 @@ export class HomePage implements OnInit {
   toggleMenu() {
     this.menu.toggle();
   }
-
-  toggleIdiomas() {
-    this.menuAbierto = !this.menuAbierto;
-  } 
 
 
 
@@ -269,7 +264,7 @@ const initialHeatDataByTipo: { [key: string]: [number, number, number][] } = {
       this.map.locate({ setView: true, maxZoom: 16 });
 
       const userIcon = L.icon({
-        iconUrl: 'assets/icon/user-location.png',
+        iconUrl: 'assets/icon/pin-outline.svg',
         iconSize: [32, 32],
         iconAnchor: [16, 32],
         popupAnchor: [0, -32],
