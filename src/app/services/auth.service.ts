@@ -44,16 +44,22 @@ export class AuthService {
 
   private usuario: any = null; // Variable para almacenar los datos del usuario
 
-  setUsuario(usuario: any): void {
-    this.usuario = usuario;
-  }
-  
-  getUsuario(): any {
+setUsuario(usuario: any): void {
+  this.usuario = usuario;
+  localStorage.setItem('usuario', JSON.stringify(usuario)); // <-- Guarda en localStorage
+}
+
+getUsuario(): any {
+  if (this.usuario) {
     return this.usuario;
   }
-  
-    getHeatmapData(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/heatmap`);
+  // Si no está en memoria, intenta cargarlo de localStorage
+  const user = localStorage.getItem('usuario');
+  if (user) {
+    this.usuario = JSON.parse(user);
+    return this.usuario;
   }
+  return null;
+}
 }
   
