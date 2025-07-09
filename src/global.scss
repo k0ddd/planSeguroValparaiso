@@ -66,3 +66,24 @@ ion-content {
   --background: var(--page-background);
   background: var(--page-background) !important;
 }
+
+ion-tab-button.tab-selected {
+  --color: #3880ff !important;
+  --background: rgba(56, 128, 255, 0.12) !important;
+  background: rgba(56, 128, 255, 0.12) !important;
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+/* Fuerza el color del icono y label usando ::part */
+ion-tab-button.tab-selected::part(native) {
+  --color: #fff !important; /* Icono y texto en blanco */
+  background: rgba(255,255,255,0.12) !important; /* Fondo suave blanco */
+  border-radius: 12px;
+  transition: background 0.2s;
+}
+
+ion-tab-button.tab-selected ion-icon,
+ion-tab-button.tab-selected ion-label {
+  color: #fff !important;
+}

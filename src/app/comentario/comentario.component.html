@@ -7,10 +7,7 @@
 <ion-content>
 
   <!-- Formulario para ingresar reporte -->
-  <ion-card *ngIf="mostrarFormulario" style="padding-bottom: 56px;">
-    <ion-card-header>
-      <ion-card-title>Detalles del Reporte</ion-card-title>
-    </ion-card-header>
+  <ion-card *ngIf="mostrarFormulario" [@formAnim] style="padding-bottom: 56px;">
     <ion-card-content>
       <form [formGroup]="reporteForm" (ngSubmit)="onSubmit()">
         <ion-item>
