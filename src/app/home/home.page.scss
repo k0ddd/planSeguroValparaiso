@@ -86,10 +86,10 @@ ion-card-content {
 
 /* Formulario reporte: aparece sobre el mapa, centrado y con un max width */
 .formulario-reporte {
-  position: fixed;
-  top: 40%;
-  left: 46%;
-  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50px; /* Margen desde la parte superior del mapa */
+  left: 50%;
+  transform: translateX(-55%); /* Centrado horizontalmente */
   width: 90%;
   max-width: 400px;
   z-index: 10;
@@ -99,6 +99,39 @@ ion-card-content {
   padding: 0;
 }
 
+/* Botón para cerrar el formulario */
+.boton-cerrar {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 20; /* Asegura que esté por encima de todo */
+}
+
+/* Define la animación de entrada desde arriba */
+@keyframes slideInFromTop {
+  from {
+    /* Empieza fuera de la pantalla, arriba, y totalmente transparente */
+    transform: translate(-55%, -100vh);
+    opacity: 0;
+  }
+  to {
+    /* Termina en su posición final (centrado horizontalmente) y totalmente visible */
+    transform: translateX(-55%);
+    opacity: 1;
+  }
+}
+
+/* Define la animación de salida hacia arriba */
+@keyframes slideOutToTop {
+  from {
+    transform: translateX(-55%);
+    opacity: 1;
+  }
+  to {
+    transform: translate(-55%, -100vh);
+    opacity: 0;
+  }
+}
 
 @keyframes fadeIn {
   from {
@@ -109,6 +142,21 @@ ion-card-content {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Clase para aplicar la animación de entrada */
+.slide-in-animation {
+  animation-name: slideInFromTop;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-out;
+}
+
+/* Clase para aplicar la animación de salida */
+.slide-out-animation {
+  animation-name: slideOutToTop;
+  animation-duration: 0.5s;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards; /* Mantiene el estado final de la animación */
 }
 
 ion-item {
@@ -137,4 +185,3 @@ ion-item {
 .color-circle:hover {
   transform: scale(1.2);
 }
-

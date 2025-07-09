@@ -9,7 +9,13 @@
     <div id="map"></div>
 
     <!-- Formulario que aparece encima del mapa -->
-    <ion-card *ngIf="mostrarFormulario" class="formulario-reporte">
+    <ion-card *ngIf="mostrarFormulario"
+              class="formulario-reporte"
+              [class.slide-in-animation]="!animatingOut"
+              [class.slide-out-animation]="animatingOut">
+      <ion-button class="boton-cerrar" fill="clear" (click)="toggleFormulario()">
+        <ion-icon slot="icon-only" name="close-outline" color="medium"></ion-icon>
+      </ion-button>
       <ion-card-header>
         <ion-card-title>Detalles del Reporte</ion-card-title>
       </ion-card-header>

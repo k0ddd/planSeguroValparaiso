@@ -16,7 +16,7 @@ import {
 import { AuthService } from '../services/auth.service';
 import { addIcons } from 'ionicons';
 import {
-  personOutline, homeOutline, settingsOutline, chatboxEllipsesOutline,
+  personOutline, homeOutline, settingsOutline, chatboxEllipsesOutline, closeOutline,
   cameraOutline, reorderFourOutline, optionsOutline,
   search
 } from 'ionicons/icons';
@@ -80,6 +80,7 @@ export class HomePage implements OnInit {
   private map: any;
   private heatLayer: any; // ✅ Declaración aquí
   mostrarFormulario = false;
+  animatingOut = false;
   reporteForm: FormGroup;
   private heatLayersByTipo: {[tipo: string]: any} = {}; // para guardar capas heatmap por tipo
   private ubicacionActual: L.LatLng | null = null; // 👈 Guardar ubicación actual
@@ -135,7 +136,7 @@ export class HomePage implements OnInit {
 
     addIcons({
       personOutline, homeOutline, settingsOutline,
-      chatboxEllipsesOutline, cameraOutline, reorderFourOutline, optionsOutline
+      chatboxEllipsesOutline, cameraOutline, reorderFourOutline, optionsOutline, closeOutline
     });
   }
 
@@ -422,9 +423,16 @@ this.routingControl = routingControl;
 
 
   toggleFormulario() {
-    this.mostrarFormulario = !this.mostrarFormulario;
-
-    if (this.mostrarFormulario) {
+    if (this.mostrarFormulario && !this.animatingOut) {
+      // Inicia la animación de salida
+      this.animatingOut = true;
+      setTimeout(() => {
+        this.mostrarFormulario = false;
+        this.animatingOut = false; // Resetea el estado
+      }, 500); // Debe coincidir con la duración de la animación de salida
+    } else if (!this.mostrarFormulario) {
+      // Muestra el formulario
+      this.mostrarFormulario = true;
       this.obtenerUbicacionActual();
     }
   }
@@ -510,4 +518,3 @@ obtenerUbicacionActual() {
     }
   }
 }
-
