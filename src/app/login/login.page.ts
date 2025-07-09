@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonLabel, IonInput, IonButton } from '@ionic/angular/standalone';
-import { RouterLink, RouterLinkActive, Router } from '@angular/router'; // Agregar Router aquí
+import { IonContent, IonHeader, IonTitle, IonToolbar, IonCard, IonCardHeader, IonCardTitle, IonCardContent, IonItem, IonInput, IonButton } from '@ionic/angular/standalone';
+import { RouterLink, Router } from '@angular/router'; // Agregar Router aquí
 import { AuthService } from '../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';  // Importa HttpClientModule
 
@@ -12,22 +12,27 @@ import { HttpClientModule } from '@angular/common/http';  // Importa HttpClientM
   styleUrls: ['./login.page.scss'],
   standalone: true,
   imports: [
-    IonButton, IonInput, IonItem, IonCardContent, IonCardTitle, IonCardHeader, IonCard, IonContent, IonHeader, IonTitle, IonToolbar,
-    CommonModule, FormsModule, RouterLink, HttpClientModule // Aquí agregas HttpClientModule
+    IonButton, IonInput, IonItem, IonCardContent, IonCardTitle, IonCardHeader, IonCard, IonContent, IonHeader, IonTitle, IonToolbar, 
+    CommonModule, FormsModule, RouterLink, HttpClientModule 
 ]
 })
 export class LoginPage implements OnInit {
 
   correo: string = '';  // Variable para el correo
   contrasena: string = '';  // Variable para la contraseña
+  animatingOut = false;
 
   constructor(
     private authService: AuthService,
-    private router: Router  // Inyectar el router aquí
+    private router: Router
   ) { }
 
   ngOnInit() { }
 
+  ionViewWillEnter() {
+    // Resetea la animación si el usuario vuelve a esta página
+    this.animatingOut = false;
+  }
   // Método que se ejecuta cuando el usuario hace click en el botón de login
   async login() {
     console.log('Correo:', this.correo);
@@ -49,5 +54,12 @@ export class LoginPage implements OnInit {
         console.error('Error al iniciar sesión', error);
       }
     );
+  }
+
+    irARegistro() {
+    this.animatingOut = true;
+    setTimeout(() => {
+      this.router.navigate(['/registro']);
+    }, 300); // Debe coincidir con la duración de la animación de salida
   }
 }
