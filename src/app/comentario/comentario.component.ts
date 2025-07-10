@@ -163,20 +163,37 @@ export class ComentarioComponent implements OnInit {
     });
   }
 
+  async reverseGeocodificarCoordenadas(lat: number, lng: number): Promise<string> {
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+      const data = await response.json();
+      if (data && data.display_name) {
+        return data.display_name;
+      }
+      // Fallback si la API no devuelve un nombre
+      return `📍 ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    } catch (error) {
+      console.error('Error en geocodificación inversa:', error);
+      // Fallback en caso de error de red
+      return `📍 ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    }
+  }
 
-  obtenerReportes() {
+  async obtenerReportes() {
     this.reporteService.getReportes().subscribe({
-      next: (response: any) => {
-        this.reportes = response;
-        console.log('📋 Reportes obtenidos:', this.reportes);
-        
-        // 🔧 MEJORAR: Debug de imágenes
-        this.reportes.forEach(reporte => {
-          if (reporte.imagen) {
-            console.log('🖼️ Imagen encontrada:', reporte.imagen);
-            console.log('🔗 URL procesada:', this.getImageUrl(reporte.imagen));
+      next: async (response: any[]) => {
+        const reportesOrdenados = response.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
+
+        this.reportes = await Promise.all(reportesOrdenados.map(async (reporte) => {
+          if (!reporte.ubicacion && reporte.latitud && reporte.longitud) {
+            console.log(`🔄️ Traduciendo coordenadas para reporte ${reporte._id}`);
+            reporte.ubicacion = await this.reverseGeocodificarCoordenadas(reporte.latitud, reporte.longitud);
+          } else if (!reporte.ubicacion) {
+            reporte.ubicacion = 'Ubicación no disponible';
           }
-        });
+          return reporte;
+        }));
+        console.log('📋 Reportes procesados y listos para mostrar:', this.reportes);
       },
       error: (error: any) => {
         console.error('❌ Error al obtener reportes:', error);
@@ -247,6 +264,3 @@ export class ComentarioComponent implements OnInit {
     return `http://localhost:3000/${imagePath}`;
   }
 }
-
-
-

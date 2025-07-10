@@ -274,7 +274,7 @@ private obtenerGradientePorTipo(tipo: string) {
     this.map.invalidateSize();
     
     // 📍 Geolocalización del usuario
-    this.map.locate({ setView: true, maxZoom: 16 });
+    this.map.locate({ setView: true, maxZoom: 16, enableHighAccuracy: true });
 
     const userIcon = L.icon({
       iconUrl: 'assets/icon/pin-outline.svg',
@@ -453,9 +453,9 @@ this.routingControl = routingControl;
 obtenerUbicacionActual() {
   if (navigator.geolocation) {
     console.log('Intentando obtener ubicación...');
-    navigator.geolocation.getCurrentPosition(
+    navigator.geolocation.getCurrentPosition( // 🔧 SOLICITAR ALTA PRECISIÓN
       async (position) => {
-        console.log('Ubicación obtenida:', position);
+        console.log('📍 Ubicación obtenida con alta precisión:', position);
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         
@@ -478,7 +478,8 @@ obtenerUbicacionActual() {
         
         // 🔧 AGREGAR: Mostrar error en el campo ubicación
         this.reporteForm.get('ubicacion')?.setValue('❌ No se pudo obtener la ubicación');
-      }
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   } else {
     alert('La geolocalización no es compatible.');
@@ -498,8 +499,9 @@ obtenerUbicacionActual() {
 
       // Obtener coordenadas actuales si están disponibles
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
+        navigator.geolocation.getCurrentPosition( // 🔧 SOLICITAR ALTA PRECISIÓN
           (position) => {
+            console.log('📍 Ubicación para el reporte (alta precisión):', position);
             const lat = position.coords.latitude;
             const lng = position.coords.longitude;
             
@@ -544,7 +546,8 @@ obtenerUbicacionActual() {
           (error) => {
             console.error('Error al obtener ubicación:', error);
             alert('No se pudo obtener la ubicación actual. El reporte no se puede enviar.');
-          }
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
       } else {
         alert('La geolocalización no está disponible en este dispositivo.');
