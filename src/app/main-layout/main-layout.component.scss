@@ -16,3 +16,34 @@ ion-tab-bar {
       --ion-tab-bar-background: transparent; 
     padding: 10px; 
   }
+  
+  @keyframes tabActiveBounce {
+    0%   { transform: scale(1); }
+    60%  { transform: scale(1.15); }
+    100% { transform: scale(1); }
+  }
+  
+  ion-tab-button.tab-selected {
+    --color: #3880ff !important;
+    background: rgba(56, 128, 255, 0.12) !important;
+    border-radius: 12px;
+    animation: tabActiveBounce 0.3s;
+    transition: background 0.2s;
+  }
+  
+  /* Fuerza el color del icono y label usando ::part */
+  ion-tab-button.tab-selected::part(native) {
+    --color: #fff !important; /* Icono y texto en blanco */
+    background: rgba(255,255,255,0.12) !important; /* Fondo suave blanco */
+    border-radius: 12px;
+    transition: background 0.2s;
+  }
+  
+  ion-tab-button.tab-selected ion-icon,
+  ion-tab-button.tab-selected ion-label {
+    color: #fff !important;
+  }
+  
+  ion-tab-button {
+    transition: background 0.2s;
+  }

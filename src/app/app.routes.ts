@@ -15,14 +15,17 @@ export const routes: Routes = [
       {
         path: 'home',
         loadComponent: () => import('./home/home.page').then(m => m.HomePage),
+        data: { animation: 'HomePage' }
       },
       {
         path: 'comentario',
         loadComponent: () => import('./comentario/comentario.component').then(m => m.ComentarioComponent),
+        data: { animation: 'ComentarioPage' }
       },
       {
         path: 'perfil',
         loadComponent: () => import('./perfil/perfil.component').then(m => m.PerfilComponent),
+        data: { animation: 'PerfilPage' }
       },
       {
         path: '',

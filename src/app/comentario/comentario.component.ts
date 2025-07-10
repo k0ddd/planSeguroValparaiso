@@ -15,6 +15,7 @@ import {
   megaphoneOutline, trashOutline, flagOutline, warningOutline
 } from 'ionicons/icons';
 import { AlertController } from '@ionic/angular';
+import { trigger, transition, style, animate } from '@angular/animations';
 
 addIcons({
   personOutline, homeOutline, settingsOutline,
@@ -32,6 +33,17 @@ addIcons({
     IonLabel, IonSearchbar, RouterLink, IonMenu, IonTextarea, IonItem, IonSelect, IonSelectOption, IonInput,
     CommonModule, ReactiveFormsModule // Agrega ReactiveFormsModule aquí
   ],
+  animations: [
+    trigger('formAnim', [
+      transition(':enter', [
+        style({ opacity: 0, transform: 'translateY(40px) scale(0.98)' }),
+        animate('300ms cubic-bezier(.35,0,.25,1)', style({ opacity: 1, transform: 'translateY(0) scale(1)' }))
+      ]),
+      transition(':leave', [
+        animate('200ms cubic-bezier(.35,0,.25,1)', style({ opacity: 0, transform: 'translateY(40px) scale(0.98)' }))
+      ])
+    ])
+  ]
 })
 export class ComentarioComponent implements OnInit {
   @ViewChild(IonContent, { static: false }) content!: IonContent; // Referencia al contenido de la página
@@ -70,32 +82,32 @@ export class ComentarioComponent implements OnInit {
     this.imagenSeleccionada = event.target.files[0];
   }
 
-onSubmit() {
-  const formData = new FormData();
-  formData.append('tipo', this.reporteForm.get('tipo')?.value);
-  formData.append('descripcion', this.reporteForm.get('descripcion')?.value);
-  formData.append('ubicacion', this.reporteForm.get('ubicacion')?.value);
+  onSubmit() {
+    const formData = new FormData();
+    formData.append('tipo', this.reporteForm.get('tipo')?.value);
+    formData.append('descripcion', this.reporteForm.get('descripcion')?.value);
+    formData.append('ubicacion', this.reporteForm.get('ubicacion')?.value);
 
-  const usuarioId = localStorage.getItem('usuarioId');
-  if (usuarioId) {
-    formData.append('usuarioId', usuarioId);
-  }
-
-  if (this.imagenSeleccionada) {
-    formData.append('imagen', this.imagenSeleccionada);
-  }
-
-  this.reporteService.crearReporte(formData).subscribe({
-    next: (response) => {
-      console.log('Reporte creado:', response);
-      this.mostrarFormulario = false;
-      this.obtenerReportes();
-    },
-    error: (error: any) => {
-      console.error('Error al crear el reporte:', error);
+    const usuarioId = localStorage.getItem('usuarioId');
+    if (usuarioId) {
+      formData.append('usuarioId', usuarioId);
     }
-  });
-}
+
+    if (this.imagenSeleccionada) {
+      formData.append('imagen', this.imagenSeleccionada);
+    }
+
+    this.reporteService.crearReporte(formData).subscribe({
+      next: (response) => {
+        console.log('Reporte creado:', response);
+        this.mostrarFormulario = false;
+        this.obtenerReportes();
+      },
+      error: (error: any) => {
+        console.error('Error al crear el reporte:', error);
+      }
+    });
+  }
 
 
   obtenerReportes() {
@@ -104,16 +116,16 @@ onSubmit() {
     });
   }
   eliminarReporte(id: string) {
-  this.reporteService.eliminarReporte(id).subscribe({
-    next: () => {
-      this.reportes = this.reportes.filter(r => r._id !== id);
-      console.log('Reporte eliminado correctamente');
-    },
-    error: (error: any) => {
-      console.error('Error al eliminar reporte:', error);
-    }
-  });
-}
+    this.reporteService.eliminarReporte(id).subscribe({
+      next: () => {
+        this.reportes = this.reportes.filter(r => r._id !== id);
+        console.log('Reporte eliminado correctamente');
+      },
+      error: (error: any) => {
+        console.error('Error al eliminar reporte:', error);
+      }
+    });
+  }
 
   async abrirOpcionesReporte(reporte: any) {
     const alert = await this.alertController.create({
@@ -141,7 +153,7 @@ onSubmit() {
     console.log('Contenido reportado:', reporte, 'Motivo:', tipo);
     // Aquí podrías enviar el reporte a tu backend o mostrar un mensaje de éxito
   }
-} 
+}
 
 
 
