@@ -130,10 +130,9 @@ export class HomePage implements OnInit, AfterViewInit { // 🔧 Implementar Aft
   ) {
     this.reporteForm = this.fb.group({
       tipo: [''],
-      descripcion: ['']
+      descripcion: [''],
+      ubicacion: [''] // 🔧 AGREGAR esta línea
     });
-
-    
 
     addIcons({
       personOutline, homeOutline, settingsOutline,
@@ -455,21 +454,37 @@ obtenerUbicacionActual() {
   if (navigator.geolocation) {
     console.log('Intentando obtener ubicación...');
     navigator.geolocation.getCurrentPosition(
-      (position) => {
+      async (position) => {
         console.log('Ubicación obtenida:', position);
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         
         // Centrar el mapa en la ubicación actual
         this.map.setView([lat, lng], 16);
+        
+        // 🔧 AGREGAR: Llenar el campo ubicación en el formulario
+        try {
+          const direccion = await this.obtenerDireccionDesdeCoordenadas(lat, lng);
+          this.reporteForm.get('ubicacion')?.setValue(direccion);
+        } catch (error) {
+          // Si falla la API, mostrar coordenadas formateadas
+          const direccionAmigable = `📍 ${lat.toFixed(4)}, ${lng.toFixed(4)} - Valparaíso`;
+          this.reporteForm.get('ubicacion')?.setValue(direccionAmigable);
+        }
       },
       (error) => {
         console.error('Error al obtener ubicación:', error);
         alert('No se pudo obtener la ubicación actual.');
+        
+        // 🔧 AGREGAR: Mostrar error en el campo ubicación
+        this.reporteForm.get('ubicacion')?.setValue('❌ No se pudo obtener la ubicación');
       }
     );
   } else {
     alert('La geolocalización no es compatible.');
+    
+    // 🔧 AGREGAR: Mostrar mensaje en el campo ubicación
+    this.reporteForm.get('ubicacion')?.setValue('❌ Geolocalización no disponible');
   }
 }
 
@@ -494,6 +509,7 @@ obtenerUbicacionActual() {
               descripcion: formData.descripcion,
               latitud: lat,
               longitud: lng,
+              ubicacion: `📍 ${lat.toFixed(4)}, ${lng.toFixed(4)} - Valparaíso`, // 🔧 MANTENER esta línea
               fecha: new Date(),
               imagen: '' // Se puede agregar después si es necesario
             };

@@ -47,13 +47,18 @@
             <ion-label position="stacked">Descripción del Incidente</ion-label>
             <ion-textarea formControlName="descripcion" placeholder="Escribe tu comentario aquí..." rows="4"></ion-textarea>
           </ion-item>
+          <ion-item>
+            <ion-label position="stacked">Ubicación del Incidente</ion-label>
+            <ion-input formControlName="ubicacion" placeholder="Obteniendo ubicación..." type="text" readonly></ion-input>
+          </ion-item>
+          
           <ion-button expand="full" type="submit" class="btnReporte">Enviar Reporte</ion-button>
         </form>
       </ion-card-content>
     </ion-card>
 
   </div>
-
+  
   <!-- Botón flotante fijo -->
   <div class="floating-button">
     <ion-button expand="block" class="boton" (click)="toggleFormulario()">Reportar</ion-button>

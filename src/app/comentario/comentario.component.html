@@ -57,10 +57,22 @@
     </div>
   </ion-card-header>
     <ion-card-content>
-      <p><strong>Ubicación:</strong> {{ reporte.ubicacion }}</p>
+      <p><strong>Ubicación:</strong> 
+        <span *ngIf="reporte.ubicacion">{{ reporte.ubicacion }}</span>
+        <span *ngIf="!reporte.ubicacion && reporte.latitud && reporte.longitud">
+          📍 {{ reporte.latitud.toFixed(4) }}, {{ reporte.longitud.toFixed(4) }}
+        </span>
+        <span *ngIf="!reporte.ubicacion && !reporte.latitud">No disponible</span>
+      </p>
       <p><strong>Descripción:</strong> {{ reporte.descripcion }}</p>
       <p *ngIf="reporte.imagen"><strong>Imagen del incidente:</strong></p>
-      <img *ngIf="reporte.imagen" [src]="reporte.imagen" alt="Imagen incidente" style="width: 100%; border-radius: 8px;">
+      
+      <!-- 🔧 CORREGIR: Detectar si ya es URL completa -->
+      <img *ngIf="reporte.imagen" 
+           [src]="getImageUrl(reporte.imagen)" 
+           alt="Imagen incidente" 
+           style="width: 100%; border-radius: 8px;">
+
     </ion-card-content>
 
   </ion-card>
