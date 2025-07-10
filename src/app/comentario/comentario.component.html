@@ -7,45 +7,62 @@
 <ion-content>
 
   <!-- Formulario para ingresar reporte -->
-  <ion-card *ngIf="mostrarFormulario" [@formAnim] style="padding-bottom: 56px;">
+  <ion-card *ngIf="mostrarFormulario" [@formAnim] style="padding-bottom: 56px;" class="formulario-card">
     <ion-card-content>
       <form [formGroup]="reporteForm" (ngSubmit)="onSubmit()">
-        <ion-item>
+        
+        <!-- 🔧 Tipo de Incidente con ícono -->
+        <ion-item class="form-item">
+          <ion-icon name="alert-circle-outline" class="form-icon"></ion-icon>
           <ion-label position="stacked">Tipo de Incidente</ion-label>
           <ion-select formControlName="tipo" placeholder="Selecciona el tipo de incidente">
-            <ion-select-option value="robo">Robo</ion-select-option>
-            <ion-select-option value="accidente">Accidente</ion-select-option>
-            <ion-select-option value="incendio">Incendio</ion-select-option>
-            <ion-select-option value="violencia">Violencia</ion-select-option>
-            <ion-select-option value="otro">Otro</ion-select-option>
+            <ion-select-option value="robo">🚨 Robo</ion-select-option>
+            <ion-select-option value="accidente">🚗 Accidente</ion-select-option>
+            <ion-select-option value="incendio">🔥 Incendio</ion-select-option>
+            <ion-select-option value="violencia">⚠️ Violencia</ion-select-option>
+            <ion-select-option value="otro">❓ Otro</ion-select-option>
           </ion-select>
         </ion-item>
 
-        <ion-item>
+        <!-- 🔧 Descripción con ícono -->
+        <ion-item class="form-item">
+          <ion-icon name="create-outline" class="form-icon"></ion-icon>
           <ion-label position="stacked">Descripción del Incidente</ion-label>
           <ion-textarea formControlName="descripcion" placeholder="Escribe tu comentario aquí..." rows="4"></ion-textarea>
         </ion-item>
 
-        <ion-item>
+        <!-- 🔧 Ubicación con ícono -->
+        <ion-item class="form-item">
+          <ion-icon name="location-outline" class="form-icon"></ion-icon>
           <ion-label position="stacked">Ubicación del Incidente</ion-label>
           <ion-input formControlName="ubicacion" placeholder="Ej: Av. Brasil 123, Valparaíso" type="text"></ion-input>
         </ion-item>
 
-        <ion-item>
+        <!-- 🔧 Imagen con ícono -->
+        <ion-item class="form-item">
+          <ion-icon name="camera-outline" class="form-icon"></ion-icon>
           <ion-label position="stacked">Subir Imagen (opcional)</ion-label>
           <ion-input type="file" (change)="onFileChange($event)" accept="image/*"></ion-input>
         </ion-item>
 
-        <ion-button expand="full" type="submit" class="btnReporte">Enviar Reporte</ion-button>
+        <!-- 🔧 Botón mejorado -->
+        <ion-button expand="full" type="submit" class="btnReporte-mejorado">
+          <ion-icon name="send-outline" slot="start"></ion-icon>
+          Enviar Reporte
+        </ion-button>
       </form>
     </ion-card-content>
   </ion-card>
 
   <!-- Reportes ya enviados -->
-  <ion-card *ngFor="let reporte of reportes" style="padding-bottom: 56px;">
+  <ion-card *ngFor="let reporte of reportes" style="padding-bottom: 56px;" class="reporte-card" [ngClass]="'tipo-' + reporte.tipo">
   <ion-card-header>
     <div class="header-container">
-      <ion-card-title>{{ reporte.tipo }}</ion-card-title>
+      <!-- 🔧 AGREGAR ícono al título existente -->
+      <ion-card-title class="titulo-con-icono">
+        <ion-icon [name]="getIconoPorTipo(reporte.tipo)" class="icono-tipo"></ion-icon>
+        {{ reporte.tipo | titlecase }}
+      </ion-card-title>
       <div class="header-buttons">
         <ion-button fill="clear" (click)="eliminarReporte(reporte._id)">
           <ion-icon name="trash-outline"></ion-icon>
@@ -57,10 +74,12 @@
     </div>
   </ion-card-header>
     <ion-card-content>
-      <p><strong>Ubicación:</strong> 
+      <!-- 🔧 VERIFICAR que use location-outline -->
+      <p><strong><ion-icon name="location-outline" class="icono-ubicacion"></ion-icon> Ubicación:</strong> 
         <span *ngIf="reporte.ubicacion">{{ reporte.ubicacion }}</span>
         <span *ngIf="!reporte.ubicacion && !reporte.latitud">No disponible</span>
       </p>
+
       <p><strong>Descripción:</strong> {{ reporte.descripcion }}</p>
       <p *ngIf="reporte.imagen"><strong>Imagen del incidente:</strong></p>
       
@@ -69,7 +88,6 @@
            alt="Imagen incidente" 
            style="width: 100%; border-radius: 8px;">
     </ion-card-content>
-
   </ion-card>
   <ion-button class="btnReportar" (click)="toggleFormulario()">
     <ion-icon name="megaphone-outline" style="font-size: 35px;"></ion-icon>

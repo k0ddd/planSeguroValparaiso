@@ -16,9 +16,11 @@ import {
 import { AuthService } from '../services/auth.service';
 import { addIcons } from 'ionicons';
 import {
-  personOutline, homeOutline, settingsOutline, chatboxEllipsesOutline, closeOutline,
-  cameraOutline, reorderFourOutline, optionsOutline,
-  search
+  personOutline, homeOutline, settingsOutline,
+  chatboxEllipsesOutline, closeOutline, cameraOutline, 
+  reorderFourOutline, optionsOutline, search,
+  // 🔧 AGREGAR estos iconos
+  alertCircleOutline, createOutline, locationOutline, sendOutline
 } from 'ionicons/icons';
 interface HeatLayerFunction {
   (latlngs: [number, number, number][], options?: any): any;
@@ -136,7 +138,10 @@ export class HomePage implements OnInit, AfterViewInit { // 🔧 Implementar Aft
 
     addIcons({
       personOutline, homeOutline, settingsOutline,
-      chatboxEllipsesOutline, cameraOutline, reorderFourOutline, optionsOutline, closeOutline
+      chatboxEllipsesOutline, cameraOutline, reorderFourOutline, 
+      optionsOutline, closeOutline, search,
+      // 🔧 AGREGAR estos iconos
+      alertCircleOutline, createOutline, locationOutline, sendOutline
     });
   }
 

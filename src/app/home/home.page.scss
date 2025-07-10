@@ -93,7 +93,8 @@ ion-card-content {
   width: 90%;
   max-width: 400px;
   z-index: 10;
-  background: white;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 1px solid #e0e0e0;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   padding: 0;
@@ -165,23 +166,108 @@ ion-item {
   justify-content: space-between;
 }
 
-.color-circle {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  box-shadow: 0 0 5px rgba(0,0,0,0.4);
-  border: 1px solid #ccc;
-  transition: transform 0.2s ease;
-  flex-shrink: 0;
-  margin-left: 300px;
-  cursor: default;
-  vertical-align: middle;
-
-  position: relative;
-  top: -40px;
-  left: -30px;
+.form-icon {
+  font-size: 20px;
+  color: #666666;
+  margin-right: 12px;
 }
 
-.color-circle:hover {
-  transform: scale(1.2);
+// 🔧 ARREGLAR posición del círculo de color
+.color-circle {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  border: 2px solid #e0e0e0;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  // 🔧 CORREGIR posición
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  
+  &:hover {
+    transform: translateY(-50%) scale(1.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+}
+
+// 🔧 AGREGAR posición relativa al ion-item
+ion-item:has(.color-circle) {
+  position: relative;
+  padding-right: 50px; // Espacio para el círculo
+}
+
+// 🔧 AGREGAR espacio extra para el ion-select
+ion-item ion-select {
+  padding-right: 40px; // 🔧 AGREGAR padding derecho para dejar espacio
+}
+
+// 🔧 MEJORAR el ion-item que contiene el select
+ion-item:has(.color-circle) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+  ion-select {
+    flex-grow: 1;
+    margin-right: 8px;
+  }
+}
+
+/* MEJORAR botones */
+.btnReporte {
+  background: linear-gradient(45deg, #1a1a1a, #333333);
+  color: #ffffff;
+  border-radius: 10px;
+  --background: none;
+  height: 50px;
+  font-weight: 600;
+  margin-top: 16px;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+}
+
+.boton {
+  background: linear-gradient(177deg, rgb(54, 54, 54) 0%, rgba(26, 26, 26, 1) 100%);
+  color: #ffffff;
+  border-radius: 10px;
+  --background: none;
+  font-weight: 600;
+  
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  }
+}
+
+// 🔧 AGREGAR contenedor para select y círculo
+.select-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 12px;
+  
+  ion-select {
+    flex: 1;
+  }
+  
+  .color-circle {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    border: 2px solid #e0e0e0;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    
+    &:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+  }
 }
