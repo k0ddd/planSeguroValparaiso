@@ -241,25 +241,7 @@ private obtenerGradientePorTipo(tipo: string) {
         attribution: '© OpenStreetMap contributors',
       }).addTo(this.map);
 
-      // 🔥 Datos de calor iniciales por tipo
-const initialHeatDataByTipo: { [key: string]: [number, number, number][] } = {
-  robo: [[-33.0458, -71.6197, 0.5]],
-  accidente: [[-33.0465, -71.6220, 0.8]],
-  incendio: [[-33.0440, -71.6170, 0.5]],
-};
-
-
-      for (const tipo in initialHeatDataByTipo) {
-        const gradient = this.obtenerGradientePorTipo(tipo);
-        const heatLayer = L.heatLayer(initialHeatDataByTipo[tipo], {
-          radius: 25,
-          blur: 15,
-          maxZoom: 17,
-          gradient
-        }).addTo(this.map);
-
-        this.heatLayersByTipo[tipo] = heatLayer;
-      }
+      // Las capas de calor se crearán dinámicamente al enviar un reporte.
 
       // 📍 Geolocalización del usuario
       this.map.locate({ setView: true, maxZoom: 16 });
@@ -452,18 +434,6 @@ obtenerUbicacionActual() {
         this.reporteForm.patchValue({
           ubicacion: direccion
         });
-
-        const tipo = this.reporteForm.get('tipo')?.value || 'default';
-        if (!this.heatLayersByTipo[tipo]) {
-          const gradient = this.obtenerGradientePorTipo(tipo);
-          this.heatLayersByTipo[tipo] = L.heatLayer([], {
-            radius: 25,
-            blur: 15,
-            maxZoom: 17,
-            gradient
-          }).addTo(this.map);
-        }
-        this.heatLayersByTipo[tipo].addLatLng([lat, lng, 0.7]);
         this.map.setView([lat, lng], 16);
       },
       (error) => {
@@ -480,20 +450,27 @@ obtenerUbicacionActual() {
 
 
   onSubmit() {
-    if (this.reporteForm.valid) {
+    if (this.reporteForm.valid && this.ubicacionActual) {
       const nuevoReporte = this.reporteForm.value;
       const tipo = nuevoReporte.tipo || 'default';
 
-      this.reporteService.crearReporte(nuevoReporte).subscribe({
+      // Añadimos las coordenadas al reporte que se envía al servicio
+      const reporteParaEnviar = {
+        ...nuevoReporte,
+        lat: this.ubicacionActual.lat,
+        lng: this.ubicacionActual.lng
+      };
+
+      this.reporteService.crearReporte(reporteParaEnviar).subscribe({
         next: (res) => {
           console.log('Reporte enviado:', res);
           alert('Reporte enviado con éxito.');
 
-          // Parsear lat y lng del string ubicacion "lat, lng"
-          const [latStr, lngStr] = nuevoReporte.ubicacion.split(',').map((s: string) => s.trim());
-          const lat = parseFloat(latStr);
-          const lng = parseFloat(lngStr);
+          // Usar las coordenadas guardadas
+          const lat = this.ubicacionActual!.lat;
+          const lng = this.ubicacionActual!.lng;
 
+          // Si no existe una capa de calor para este tipo, la creamos
           if (!this.heatLayersByTipo[tipo]) {
             const gradient = this.obtenerGradientePorTipo(tipo);
             this.heatLayersByTipo[tipo] = L.heatLayer([], {
@@ -503,16 +480,22 @@ obtenerUbicacionActual() {
               gradient
             }).addTo(this.map);
           }
-          this.heatLayersByTipo[tipo].addLatLng([lat, lng, 0.7]);
+
+          // Añadimos el nuevo punto a la capa de calor correspondiente
+          this.heatLayersByTipo[tipo].addLatLng([lat, lng, 0.8]); // Intensidad de 0.8
 
           this.mostrarFormulario = false;
           this.reporteForm.reset();
+          this.tipoSeleccionado = ''; // Limpiar selección
+          this.colorSeleccionado = 'transparent'; // Resetear color
         },
         error: (err) => {
           console.error('Error al enviar reporte:', err);
           alert('Error al enviar el reporte. Intenta nuevamente.');
         }
       });
+    } else if (!this.ubicacionActual) {
+      alert('No se pudo obtener la ubicación para el reporte. Por favor, actívala.');
     } else {
       alert('Por favor completa todos los campos requeridos.');
     }
