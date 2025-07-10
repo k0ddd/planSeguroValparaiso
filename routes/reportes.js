@@ -22,7 +22,29 @@ router.get('/', async (req, res) => {
 // POST - crear un nuevo reporte
 router.post('/', upload.single('imagen'), async (req, res) => {
   try {
-    const { tipo, descripcion, ubicacion, usuarioId } = req.body;
+    console.log('📝 Datos recibidos:', req.body); // 🔧 AGREGAR ESTA LÍNEA
+    
+    const { tipo, descripcion, latitud, longitud, fecha, usuarioId } = req.body;
+
+    // 🔧 AGREGAR ESTAS VALIDACIONES:
+    if (!latitud || !longitud) {
+      console.error('❌ Coordenadas faltantes:', { latitud, longitud });
+      return res.status(400).json({ 
+        error: 'Las coordenadas (latitud y longitud) son obligatorias' 
+      });
+    }
+
+    const lat = parseFloat(latitud);
+    const lng = parseFloat(longitud);
+    
+    if (isNaN(lat) || isNaN(lng)) {
+      console.error('❌ Coordenadas inválidas:', { latitud, longitud });
+      return res.status(400).json({ 
+        error: 'Las coordenadas deben ser números válidos' 
+      });
+    }
+
+    console.log('📍 Coordenadas procesadas:', { lat, lng }); // 🔧 AGREGAR ESTA LÍNEA
 
     let imagenUrl = null;
 
@@ -41,10 +63,15 @@ router.post('/', upload.single('imagen'), async (req, res) => {
           const nuevoReporte = new Reporte({
             tipo,
             descripcion,
-            ubicacion,
+            latitud: lat,
+            longitud: lng,
+            fecha: fecha || new Date(),
             imagen: imagenUrl,
             usuarioId,
           });
+
+          // 🔧 AGREGAR logging antes de guardar:
+          console.log('💾 Guardando reporte:', nuevoReporte);
 
           nuevoReporte.save()
             .then(() => res.status(201).json({ mensaje: 'Reporte creado con éxito', reporte: nuevoReporte }))
@@ -62,15 +89,20 @@ router.post('/', upload.single('imagen'), async (req, res) => {
       const nuevoReporte = new Reporte({
         tipo,
         descripcion,
-        ubicacion,
+        latitud: lat,
+        longitud: lng,
+        fecha: fecha || new Date(),
         usuarioId
       });
+
+      // 🔧 AGREGAR logging antes de guardar:
+      console.log('💾 Guardando reporte sin imagen:', nuevoReporte);
 
       await nuevoReporte.save();
       res.status(201).json({ mensaje: 'Reporte creado con éxito', reporte: nuevoReporte });
     }
   } catch (error) {
-    console.error('Error al guardar el reporte:', error);
+    console.error('❌ Error completo:', error); // 🔧 AGREGAR ESTA LÍNEA
     res.status(500).json({ error: 'Error al guardar el reporte', details: error.message });
   }
 });

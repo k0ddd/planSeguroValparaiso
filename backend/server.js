@@ -1,10 +1,25 @@
 const express = require('express');
 const { MongoClient, ObjectId } = require('mongodb');
 const cors = require('cors');
+const mongoose = require('mongoose');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+// Configurar mongoose
+mongoose.connect('mongodb://localhost:27017/dbPlanSeguroDB', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Conectado a MongoDB con Mongoose'))
+.catch(err => console.error('Error al conectar con Mongoose:', err));
+
+// Importar las rutas de reportes
+const reportesRoutes = require('../routes/reportes');
+
+// Usar las rutas de reportes
+app.use('/api/reportes', reportesRoutes);
 
 const uri = 'mongodb://localhost:27017/'; // Asegúrate de tener el nombre de la base de datos
 const port = 3000;

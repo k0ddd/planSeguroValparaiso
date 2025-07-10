@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core'; // 🔧 Agregar AfterViewInit
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -70,7 +70,7 @@ L.Icon.Default.mergeOptions({
     IonPopover,IonList
   ],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, AfterViewInit { // 🔧 Implementar AfterViewInit
   colorSeleccionado: string = 'transparent';
   mostrarPopover = false;
   tipoSeleccionado: string = '';
@@ -85,6 +85,7 @@ export class HomePage implements OnInit {
   private heatLayersByTipo: {[tipo: string]: any} = {}; // para guardar capas heatmap por tipo
   private ubicacionActual: L.LatLng | null = null; // 👈 Guardar ubicación actual
   private routingControl: any; // 👈 Control de ruta
+  private mapInitialized = false; // 🔧 Bandera para controlar inicialización
     actualizarColor(tipo: string) {
     switch (tipo) {
       case 'robo':
@@ -105,6 +106,7 @@ export class HomePage implements OnInit {
       default:
         this.colorSeleccionado = 'transparent';
     }
+    this.reporteForm.get('tipo')?.setValue(tipo);
   }
 
   abrirPopover(ev: any) {
@@ -128,8 +130,7 @@ export class HomePage implements OnInit {
   ) {
     this.reporteForm = this.fb.group({
       tipo: [''],
-      descripcion: [''],
-      ubicacion: [''],
+      descripcion: ['']
     });
 
     
@@ -141,17 +142,31 @@ export class HomePage implements OnInit {
   }
 
   ngOnInit() {
-      this.usuario = this.authService.getUsuario();
-      console.log('HomePage inicializado'); // Solo para debug
-      this.initMap();
-      this.obtenerUbicacionActual(); // 👈 Esto debe seguir estando
+    this.usuario = this.authService.getUsuario();
+    console.log('HomePage inicializado');
+    this.obtenerUbicacionActual();
   }
 
   ngAfterViewInit() {
-  this.usuario = this.authService.getUsuario();
-  this.initMap();
-  this.obtenerUbicacionActual();
-}
+    console.log('🔧 ngAfterViewInit ejecutado');
+    
+    // 🔧 Solo inicializar si no está ya inicializado
+    if (!this.mapInitialized) {
+      this.usuario = this.authService.getUsuario();
+      setTimeout(() => {
+        this.initMap();
+      }, 300);
+    } else {
+      // 🔧 Si ya está inicializado, solo invalidar tamaño y recargar reportes
+      console.log('🔧 Mapa ya inicializado, recargando reportes...');
+      if (this.map) {
+        this.map.invalidateSize();
+        setTimeout(() => {
+          this.cargarReportesEnMapa();
+        }, 500);
+      }
+    }
+  }
 
   cerrarSesion() {
     this.authService.eliminarToken();
@@ -202,135 +217,134 @@ private obtenerGradientePorTipo(tipo: string) {
 
 
  private initMap(): void {
-    setTimeout(() => {
-    console.log('Inicializando mapa...');  // Confirmar que entra
-
-      // 📍 Coordenadas de Valparaíso
-      const valparaisoCenter: L.LatLngExpression = [-33.0458, -71.6197];
-      const bounds: L.LatLngBoundsExpression = [
-        [-33.065, -71.64],
-        [-33.03, -71.6],
-      ];
-
-
-      this.map = L.map('map', {
-        center: valparaisoCenter,
-        zoom: 14,
-        zoomControl: false,
-        maxBounds: bounds,
-        maxBoundsViscosity: 1.0,
-      });
+  console.log('Inicializando mapa...');
   
-    // Verificar tamaños en consola:
-    const mapDiv = document.getElementById('map');
-    if (mapDiv) {
-      console.log('Tamaño del div del mapa:', mapDiv.clientWidth, 'x', mapDiv.clientHeight);
-      const style = window.getComputedStyle(mapDiv);
-      console.log('Estilos computados del div del mapa:', {
-        height: style.height,
-        width: style.width,
-        display: style.display,
-        position: style.position,
-      });
-    } else {
-      console.warn('No se encontró el div con id "map"');
-    }
-
-      // 🗺️ Capa base OSM
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-      }).addTo(this.map);
-
-      // 🔥 Datos de calor iniciales por tipo
-const initialHeatDataByTipo: { [key: string]: [number, number, number][] } = {
-  robo: [[-33.0458, -71.6197, 0.5]],
-  accidente: [[-33.0465, -71.6220, 0.8]],
-  incendio: [[-33.0440, -71.6170, 0.5]],
-};
-
-
-      for (const tipo in initialHeatDataByTipo) {
-        const gradient = this.obtenerGradientePorTipo(tipo);
-        const heatLayer = L.heatLayer(initialHeatDataByTipo[tipo], {
-          radius: 25,
-          blur: 15,
-          maxZoom: 17,
-          gradient
-        }).addTo(this.map);
-
-        this.heatLayersByTipo[tipo] = heatLayer;
-      }
-
-      // 📍 Geolocalización del usuario
-      this.map.locate({ setView: true, maxZoom: 16 });
-
-      const userIcon = L.icon({
-        iconUrl: 'assets/icon/pin-outline.svg',
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32],
-      });
-
-      this.map.on('locationfound', (e: L.LocationEvent) => {
-        this.ubicacionActual = e.latlng; // 👉 Guardar ubicación
-        const userMarker = L.marker(e.latlng, { icon: userIcon }).addTo(this.map);
-        userMarker.bindPopup('Estás aquí').openPopup();
-      });
-
-      this.map.on('locationerror', (e: L.ErrorEvent) => {
-        console.error('Error al obtener la ubicación:', e.message);
-        alert('No se pudo obtener tu ubicación.');
-      });
-
-      this.map.invalidateSize();
-
-      // 🔍 Barra de búsqueda centrada en Valparaíso
-      const provider = new OpenStreetMapProvider({
-        params: {
-          countrycodes: 'CL', // Solo Chile
-          viewbox: '-71.674, -33.002, -71.540, -33.101', // [lngLeft, latTop, lngRight, latBottom]
-          bounded: 1, // Limita la búsqueda al área
-        },
-      });
-
-const customIcon = L.icon({
-  iconUrl: 'assets/icon/marker-icon.png',  // Aquí pones la ruta a una imagen válida en tu proyecto
-  iconSize: [25, 41],  // Tamaño estándar para íconos Leaflet
-  iconAnchor: [12, 41], // Punto de anclaje en la base del icono
-  popupAnchor: [1, -34],
-  shadowUrl: 'assets/icon/marker-shadow.png',  // Opcional: sombra del ícono
-  shadowSize: [41, 41]
-});
-
-// Forzar a any para que TS no se queje del constructor
-const SearchControlClass: any = GeoSearchControl;
-
-const searchControl = new SearchControlClass({
-  provider,
-  style: 'bar',
-  searchLabel: '¿Dónde quieres ir?',
-  autoClose: true,
-  showMarker: true,
-  marker: {
-    icon: customIcon,
-    draggable: false,
-  },
-  retainZoomLevel: false,
-}) as L.Control;
-
-      this.map.addControl(searchControl);
-
-      // 📍 Evento personalizado al seleccionar resultado
-      this.map.on('geosearch/showlocation', (result: any) => {
-        const destino = result.location;
-        if (this.ubicacionActual) {
-          this.trazarRuta(this.ubicacionActual, L.latLng(destino.y, destino.x));
-        } else {
-          alert('Ubicación actual no disponible.');
-        }
-      });
-    }, 500);
+  // 🔧 AGREGAR VALIDACIÓN
+  const mapElement = document.getElementById('map');
+  if (!mapElement) {
+    console.log('⚠️ Elemento del mapa no encontrado, saltando inicialización');
+    return;
   }
+  
+  // 🔧 Verificar que el contenedor tenga dimensiones válidas
+  const mapDiv = document.getElementById('map');
+  if (!mapDiv) {
+    console.error('No se encontró el div con id "map"');
+    return;
+  }
+
+  console.log('Tamaño del div del mapa:', mapDiv.clientWidth, 'x', mapDiv.clientHeight);
+
+  // 🔧 Si el contenedor no tiene dimensiones, esperar más tiempo
+  if (mapDiv.clientWidth === 0 || mapDiv.clientHeight === 0) {
+    console.warn('El contenedor no tiene dimensiones válidas, reintentando...');
+    setTimeout(() => this.initMap(), 300);
+    return;
+  }
+
+  // 🔧 Marcar como inicializado ANTES de crear el mapa
+  this.mapInitialized = true;
+
+  // 📍 Coordenadas de Valparaíso
+  const valparaisoCenter: L.LatLngExpression = [-33.0458, -71.6197];
+  
+  // 🔧 Bounds corregidos
+  const bounds: L.LatLngBoundsExpression = [
+    [-33.0700, -71.6800], // Suroeste
+    [-33.0200, -71.5800]  // Noreste
+  ];
+
+  this.map = L.map('map', {
+    center: valparaisoCenter,
+    zoom: 14,
+    zoomControl: false,
+    maxBounds: bounds,
+    maxBoundsViscosity: 1.0,
+  });
+
+  // 🗺️ Capa base OSM
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+  }).addTo(this.map);
+
+  // 🔧 Esperar a que el mapa esté listo antes de agregar capas de calor
+  this.map.whenReady(() => {
+    console.log('Mapa listo, agregando capas de calor...');
+    
+    // Forzar recalcular el tamaño
+    this.map.invalidateSize();
+    
+    // 📍 Geolocalización del usuario
+    this.map.locate({ setView: true, maxZoom: 16 });
+
+    const userIcon = L.icon({
+      iconUrl: 'assets/icon/pin-outline.svg',
+      iconSize: [32, 32],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32],
+    });
+
+    this.map.on('locationfound', (e: L.LocationEvent) => {
+      this.ubicacionActual = e.latlng;
+      const userMarker = L.marker(e.latlng, { icon: userIcon }).addTo(this.map);
+      userMarker.bindPopup('Estás aquí').openPopup();
+    });
+
+    this.map.on('locationerror', (e: L.ErrorEvent) => {
+      console.error('Error al obtener la ubicación:', e.message);
+      alert('No se pudo obtener tu ubicación.');
+    });
+
+    // 🔍 Barra de búsqueda centrada en Valparaíso
+    const provider = new OpenStreetMapProvider({
+      params: {
+        countrycodes: 'CL',
+        viewbox: '-71.674, -33.002, -71.540, -71.101',
+        bounded: 1,
+      },
+    });
+
+    const customIcon = L.icon({
+      iconUrl: 'assets/icon/marker-icon.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowUrl: 'assets/icon/marker-shadow.png',
+      shadowSize: [41, 41]
+    });
+
+    const SearchControlClass: any = GeoSearchControl;
+    const searchControl = new SearchControlClass({
+      provider,
+      style: 'bar',
+      searchLabel: '¿Dónde quieres ir?',
+      autoClose: true,
+      showMarker: true,
+      marker: {
+        icon: customIcon,
+        draggable: false,
+      },
+      retainZoomLevel: false,
+    }) as L.Control;
+
+    this.map.addControl(searchControl);
+
+    // 📍 Evento personalizado al seleccionar resultado
+    this.map.on('geosearch/showlocation', (result: any) => {
+      const destino = result.location;
+      if (this.ubicacionActual) {
+        this.trazarRuta(this.ubicacionActual, L.latLng(destino.y, destino.x));
+      } else {
+        alert('Ubicación actual no disponible.');
+      }
+    });
+
+    // 🔥 CARGAR REPORTES REALES DESDE LA BASE DE DATOS
+    setTimeout(() => {
+      this.cargarReportesEnMapa();
+    }, 1000);
+  });
+}
 
   
 
@@ -441,29 +455,12 @@ obtenerUbicacionActual() {
   if (navigator.geolocation) {
     console.log('Intentando obtener ubicación...');
     navigator.geolocation.getCurrentPosition(
-      async (position) => {
+      (position) => {
         console.log('Ubicación obtenida:', position);
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
-
-        const direccion = await this.obtenerDireccionDesdeCoordenadas(lat, lng);
-        console.log('Dirección traducida:', direccion);
-
-        this.reporteForm.patchValue({
-          ubicacion: direccion
-        });
-
-        const tipo = this.reporteForm.get('tipo')?.value || 'default';
-        if (!this.heatLayersByTipo[tipo]) {
-          const gradient = this.obtenerGradientePorTipo(tipo);
-          this.heatLayersByTipo[tipo] = L.heatLayer([], {
-            radius: 25,
-            blur: 15,
-            maxZoom: 17,
-            gradient
-          }).addTo(this.map);
-        }
-        this.heatLayersByTipo[tipo].addLatLng([lat, lng, 0.7]);
+        
+        // Centrar el mapa en la ubicación actual
         this.map.setView([lat, lng], 16);
       },
       (error) => {
@@ -481,40 +478,127 @@ obtenerUbicacionActual() {
 
   onSubmit() {
     if (this.reporteForm.valid) {
-      const nuevoReporte = this.reporteForm.value;
-      const tipo = nuevoReporte.tipo || 'default';
+      const formData = this.reporteForm.value;
+      const tipo = formData.tipo || 'otro';
 
-      this.reporteService.crearReporte(nuevoReporte).subscribe({
-        next: (res) => {
-          console.log('Reporte enviado:', res);
-          alert('Reporte enviado con éxito.');
+      // Obtener coordenadas actuales si están disponibles
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            
+            // Crear el objeto reporte con las coordenadas
+            const nuevoReporte = {
+              tipo: formData.tipo,
+              descripcion: formData.descripcion,
+              latitud: lat,
+              longitud: lng,
+              fecha: new Date(),
+              imagen: '' // Se puede agregar después si es necesario
+            };
 
-          // Parsear lat y lng del string ubicacion "lat, lng"
-          const [latStr, lngStr] = nuevoReporte.ubicacion.split(',').map((s: string) => s.trim());
-          const lat = parseFloat(latStr);
-          const lng = parseFloat(lngStr);
+            // Enviar reporte al servidor
+            this.reporteService.crearReporte(nuevoReporte).subscribe({
+              next: (res) => {
+                console.log('Reporte enviado:', res);
+                alert('Reporte enviado con éxito.');
 
-          if (!this.heatLayersByTipo[tipo]) {
+                // Agregar punto al mapa de calor inmediatamente
+                if (!this.heatLayersByTipo[tipo]) {
+                  const gradient = this.obtenerGradientePorTipo(tipo);
+                  this.heatLayersByTipo[tipo] = L.heatLayer([], {
+                    radius: 25,
+                    blur: 15,
+                    maxZoom: 17,
+                    gradient
+                  }).addTo(this.map);
+                }
+                this.heatLayersByTipo[tipo].addLatLng([lat, lng, 0.7]);
+
+                this.mostrarFormulario = false;
+                this.reporteForm.reset();
+              },
+              error: (err) => {
+                console.error('Error al enviar reporte:', err);
+                alert('Error al enviar el reporte. Intenta nuevamente.');
+              }
+            });
+          },
+          (error) => {
+            console.error('Error al obtener ubicación:', error);
+            alert('No se pudo obtener la ubicación actual. El reporte no se puede enviar.');
+          }
+        );
+      } else {
+        alert('La geolocalización no está disponible en este dispositivo.');
+      }
+    } else {
+      alert('Por favor completa todos los campos requeridos.');
+    }
+  }
+
+  // 🔥 MEJORADO: Método para cargar reportes existentes desde la base de datos
+  private cargarReportesEnMapa() {
+    console.log('🔥 Cargando reportes desde la base de datos...');
+    
+    // 🔧 Limpiar capas existentes para evitar duplicados
+    for (const tipo in this.heatLayersByTipo) {
+      if (this.heatLayersByTipo[tipo] && this.map) {
+        this.map.removeLayer(this.heatLayersByTipo[tipo]);
+      }
+    }
+    this.heatLayersByTipo = {};
+    
+    this.reporteService.getReportes().subscribe({
+      next: (reportes) => {
+        console.log('📊 Reportes obtenidos para el mapa:', reportes);
+        
+        if (!reportes || reportes.length === 0) {
+          console.log('📝 No hay reportes para mostrar en el mapa');
+          return;
+        }
+        
+        // 🔧 Agrupar reportes por tipo para crear capas más eficientes
+        const reportesPorTipo: { [key: string]: [number, number, number][] } = {};
+        
+        reportes.forEach(reporte => {
+          const lat = reporte.latitud;
+          const lng = reporte.longitud;
+          const tipo = reporte.tipo || 'otro';
+          
+          console.log(`📍 Procesando reporte: ${tipo} en [${lat}, ${lng}]`);
+          
+          if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
+            if (!reportesPorTipo[tipo]) {
+              reportesPorTipo[tipo] = [];
+            }
+            reportesPorTipo[tipo].push([lat, lng, 0.7]);
+          } else {
+            console.warn('⚠️ Coordenadas inválidas para el reporte:', reporte);
+          }
+        });
+        
+        // 🔧 Crear capas de calor por tipo
+        for (const tipo in reportesPorTipo) {
+          if (reportesPorTipo[tipo].length > 0) {
+            console.log(`🔥 Creando capa de calor para: ${tipo} con ${reportesPorTipo[tipo].length} puntos`);
+            
             const gradient = this.obtenerGradientePorTipo(tipo);
-            this.heatLayersByTipo[tipo] = L.heatLayer([], {
+            this.heatLayersByTipo[tipo] = L.heatLayer(reportesPorTipo[tipo], {
               radius: 25,
               blur: 15,
               maxZoom: 17,
               gradient
             }).addTo(this.map);
           }
-          this.heatLayersByTipo[tipo].addLatLng([lat, lng, 0.7]);
-
-          this.mostrarFormulario = false;
-          this.reporteForm.reset();
-        },
-        error: (err) => {
-          console.error('Error al enviar reporte:', err);
-          alert('Error al enviar el reporte. Intenta nuevamente.');
         }
-      });
-    } else {
-      alert('Por favor completa todos los campos requeridos.');
-    }
+        
+        console.log('🎯 Capas de calor creadas:', Object.keys(this.heatLayersByTipo));
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar reportes para el mapa:', error);
+      }
+    });
   }
 }
