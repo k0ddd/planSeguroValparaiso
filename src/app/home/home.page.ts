@@ -143,7 +143,6 @@ export class HomePage implements OnInit {
   ngOnInit() {
       this.usuario = this.authService.getUsuario();
       console.log('HomePage inicializado'); // Solo para debug
-      this.initMap();
       this.obtenerUbicacionActual(); // 👈 Esto debe seguir estando
   }
 
