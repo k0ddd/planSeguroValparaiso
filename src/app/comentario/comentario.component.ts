@@ -163,20 +163,61 @@ export class ComentarioComponent implements OnInit {
     });
   }
 
+  // 🔧 NUEVO MÉTODO para geocodificación inversa (coordenadas → dirección)
+  async obtenerDireccionDesdeCoordenadas(lat: number, lng: number): Promise<string> {
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1`);
+      const data = await response.json();
+      
+      if (data && data.display_name) {
+        // Extraer partes relevantes de la dirección
+        const address = data.address;
+        let direccionAmigable = '';
+        
+        if (address.road) {
+          direccionAmigable += address.road;
+        }
+        if (address.house_number) {
+          direccionAmigable += ' ' + address.house_number;
+        }
+        if (address.neighbourhood || address.suburb) {
+          direccionAmigable += ', ' + (address.neighbourhood || address.suburb);
+        }
+        if (address.city) {
+          direccionAmigable += ', ' + address.city;
+        }
+        
+        return direccionAmigable || data.display_name.split(',')[0];
+      }
+      
+      return `📍 ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    } catch (error) {
+      console.error('Error en geocodificación inversa:', error);
+      return `📍 ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+    }
+  }
 
+  // 🔧 MODIFICAR el método obtenerReportes para procesar ubicaciones
   obtenerReportes() {
     this.reporteService.getReportes().subscribe({
-      next: (response: any) => {
+      next: async (response: any) => {
         this.reportes = response;
         console.log('📋 Reportes obtenidos:', this.reportes);
         
-        // 🔧 MEJORAR: Debug de imágenes
-        this.reportes.forEach(reporte => {
+        // 🔧 PROCESAR reportes que solo tienen coordenadas
+        for (let reporte of this.reportes) {
+          if (!reporte.ubicacion && reporte.latitud && reporte.longitud) {
+            console.log('🔍 Obteniendo dirección para coordenadas:', reporte.latitud, reporte.longitud);
+            reporte.ubicacion = await this.obtenerDireccionDesdeCoordenadas(reporte.latitud, reporte.longitud);
+            console.log('📍 Dirección obtenida:', reporte.ubicacion);
+          }
+          
+          // Debug de imágenes
           if (reporte.imagen) {
             console.log('🖼️ Imagen encontrada:', reporte.imagen);
             console.log('🔗 URL procesada:', this.getImageUrl(reporte.imagen));
           }
-        });
+        }
       },
       error: (error: any) => {
         console.error('❌ Error al obtener reportes:', error);

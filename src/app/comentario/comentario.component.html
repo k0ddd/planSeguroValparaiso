@@ -28,7 +28,7 @@
 
         <ion-item>
           <ion-label position="stacked">Ubicación del Incidente</ion-label>
-          <ion-input formControlName="ubicacion" placeholder="Ingresa la ubicación (ej: Calle 123, Ciudad)" type="text"></ion-input>
+          <ion-input formControlName="ubicacion" placeholder="Ej: Av. Brasil 123, Valparaíso" type="text"></ion-input>
         </ion-item>
 
         <ion-item>
@@ -59,20 +59,15 @@
     <ion-card-content>
       <p><strong>Ubicación:</strong> 
         <span *ngIf="reporte.ubicacion">{{ reporte.ubicacion }}</span>
-        <span *ngIf="!reporte.ubicacion && reporte.latitud && reporte.longitud">
-          📍 {{ reporte.latitud.toFixed(4) }}, {{ reporte.longitud.toFixed(4) }}
-        </span>
         <span *ngIf="!reporte.ubicacion && !reporte.latitud">No disponible</span>
       </p>
       <p><strong>Descripción:</strong> {{ reporte.descripcion }}</p>
       <p *ngIf="reporte.imagen"><strong>Imagen del incidente:</strong></p>
       
-      <!-- 🔧 CORREGIR: Detectar si ya es URL completa -->
       <img *ngIf="reporte.imagen" 
            [src]="getImageUrl(reporte.imagen)" 
            alt="Imagen incidente" 
            style="width: 100%; border-radius: 8px;">
-
     </ion-card-content>
 
   </ion-card>
