@@ -174,6 +174,8 @@ export class ComentarioComponent implements OnInit {
         this.reporteForm.reset();
         this.imagenSeleccionada = null;
         this.obtenerReportes();
+        this.mostrarAlertaExito();
+
       },
       error: (error: any) => {
         console.error('❌ Error al crear el reporte:', error);
@@ -215,6 +217,16 @@ export class ComentarioComponent implements OnInit {
       return `📍 ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
     }
   }
+
+async mostrarAlertaExito() {
+  const alert = await this.alertController.create({
+    header: '¡Éxito!',
+    message: 'Tu reporte ha sido enviado con éxito.',
+    buttons: ['Aceptar']
+  });
+
+  await alert.present();
+}
 
   // 🔧 MODIFICAR el método obtenerReportes para procesar ubicaciones
   obtenerReportes() {
