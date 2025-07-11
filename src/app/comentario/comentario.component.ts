@@ -9,18 +9,26 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'; // Importa ReactiveFormsModule
 import { ReporteService } from '../services/reporte.service';
 import { addIcons } from 'ionicons';
-import {
+import { 
   personOutline, homeOutline, settingsOutline,
-  chatboxEllipsesOutline, cameraOutline, reorderFourOutline, optionsOutline,
-  megaphoneOutline, trashOutline, flagOutline, warningOutline
+  chatboxEllipsesOutline, cameraOutline, reorderFourOutline, 
+  optionsOutline, megaphoneOutline, trashOutline, flagOutline, 
+  warningOutline, alertCircleOutline, carSportOutline, flameOutline, 
+  helpCircleOutline, informationCircleOutline, locationOutline,
+  // 🔧 AGREGAR estos iconos para el formulario
+  createOutline, sendOutline
 } from 'ionicons/icons';
 import { AlertController } from '@ionic/angular';
 import { trigger, transition, style, animate } from '@angular/animations';
 
 addIcons({
   personOutline, homeOutline, settingsOutline,
-  chatboxEllipsesOutline, cameraOutline, reorderFourOutline, optionsOutline,
-  megaphoneOutline, trashOutline, flagOutline, warningOutline
+  chatboxEllipsesOutline, cameraOutline, reorderFourOutline, 
+  optionsOutline, megaphoneOutline, trashOutline, flagOutline, 
+  warningOutline, alertCircleOutline, carSportOutline, flameOutline, 
+  helpCircleOutline, informationCircleOutline, locationOutline,
+  // 🔧 AGREGAR estos iconos para el formulario
+  createOutline, sendOutline
 });
 
 @Component({
@@ -53,6 +61,16 @@ export class ComentarioComponent implements OnInit {
   imagenSeleccionada: File | null = null;
 
   constructor(private fb: FormBuilder, private reporteService: ReporteService, private alertController: AlertController) {
+    addIcons({
+      personOutline, homeOutline, settingsOutline,
+      chatboxEllipsesOutline, cameraOutline, reorderFourOutline, 
+      optionsOutline, megaphoneOutline, trashOutline, flagOutline, 
+      warningOutline, alertCircleOutline, carSportOutline, flameOutline, 
+      helpCircleOutline, informationCircleOutline, locationOutline,
+      // 🔧 AGREGAR estos iconos para el formulario
+      createOutline, sendOutline
+    });
+    
     this.reporteForm = this.fb.group({
       tipo: [''],
       descripcion: [''],
@@ -63,7 +81,8 @@ export class ComentarioComponent implements OnInit {
     // Agrega los íconos aquí
     addIcons({
       personOutline, homeOutline, settingsOutline,
-      chatboxEllipsesOutline, cameraOutline, reorderFourOutline, optionsOutline, megaphoneOutline, trashOutline
+      chatboxEllipsesOutline, cameraOutline, reorderFourOutline, 
+      optionsOutline, megaphoneOutline, trashOutline
     });
   }
 
@@ -87,7 +106,7 @@ export class ComentarioComponent implements OnInit {
       const ubicacionTexto = this.reporteForm.get('ubicacion')?.value;
       
       if (ubicacionTexto && ubicacionTexto.trim()) {
-        console.log('🔍 Geocodificando ubicación:', ubicacionTexto);
+        console.log('🔍 Geocificando ubicación:', ubicacionTexto);
         
         // 🔧 USAR GEOCODIFICACIÓN para convertir texto a coordenadas
         this.geocodificarUbicacion(ubicacionTexto).then((coordenadas) => {
@@ -163,37 +182,20 @@ export class ComentarioComponent implements OnInit {
     });
   }
 
-  async reverseGeocodificarCoordenadas(lat: number, lng: number): Promise<string> {
-    try {
-      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
-      const data = await response.json();
-      if (data && data.display_name) {
-        return data.display_name;
-      }
-      // Fallback si la API no devuelve un nombre
-      return `📍 ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-    } catch (error) {
-      console.error('Error en geocodificación inversa:', error);
-      // Fallback en caso de error de red
-      return `📍 ${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-    }
-  }
 
-  async obtenerReportes() {
+  obtenerReportes() {
     this.reporteService.getReportes().subscribe({
-      next: async (response: any[]) => {
-        const reportesOrdenados = response.sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime());
-
-        this.reportes = await Promise.all(reportesOrdenados.map(async (reporte) => {
-          if (!reporte.ubicacion && reporte.latitud && reporte.longitud) {
-            console.log(`🔄️ Traduciendo coordenadas para reporte ${reporte._id}`);
-            reporte.ubicacion = await this.reverseGeocodificarCoordenadas(reporte.latitud, reporte.longitud);
-          } else if (!reporte.ubicacion) {
-            reporte.ubicacion = 'Ubicación no disponible';
+      next: (response: any) => {
+        this.reportes = response;
+        console.log('📋 Reportes obtenidos:', this.reportes);
+        
+        // 🔧 MEJORAR: Debug de imágenes
+        this.reportes.forEach(reporte => {
+          if (reporte.imagen) {
+            console.log('🖼️ Imagen encontrada:', reporte.imagen);
+            console.log('🔗 URL procesada:', this.getImageUrl(reporte.imagen));
           }
-          return reporte;
-        }));
-        console.log('📋 Reportes procesados y listos para mostrar:', this.reportes);
+        });
       },
       error: (error: any) => {
         console.error('❌ Error al obtener reportes:', error);
@@ -262,5 +264,17 @@ export class ComentarioComponent implements OnInit {
     
     // Si es una ruta relativa, agregar el servidor local
     return `http://localhost:3000/${imagePath}`;
+  }
+
+  // 🔧 CORREGIR los nombres de iconos
+  getIconoPorTipo(tipo: string): string {
+    switch (tipo) {
+      case 'robo': return 'alert-circle-outline';
+      case 'accidente': return 'car-sport-outline';
+      case 'incendio': return 'flame-outline';
+      case 'violencia': return 'warning-outline';
+      case 'otro': return 'help-circle-outline';
+      default: return 'information-circle-outline';
+    }
   }
 }

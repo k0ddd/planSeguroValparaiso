@@ -21,38 +21,42 @@
       </ion-card-header>
       <ion-card-content>
         <form [formGroup]="reporteForm" (ngSubmit)="onSubmit()">
-          <!-- Form fields aquí -->
-<ion-item>
-  <ion-label position="stacked">Tipo de Incidente</ion-label>
-  <ion-select
-    formControlName="tipo"
-    placeholder="Selecciona el tipo de incidente"
-    interface="popover"
-    (ionChange)="actualizarColor($event.detail.value)"
-  >
-    <ion-select-option value="robo">Robo</ion-select-option>
-    <ion-select-option value="accidente">Accidente</ion-select-option>
-    <ion-select-option value="incendio">Incendio</ion-select-option>
-    <ion-select-option value="violencia">Violencia</ion-select-option>
-    <ion-select-option value="otro">Otro</ion-select-option>
-  </ion-select>
-  <div
-    class="color-circle"
-    [ngStyle]="{ 'background-color': colorSeleccionado }"
-  ></div>
-</ion-item>
-
+          
+          <!-- 🔧 AGREGAR iconos a los campos -->
+          <ion-item>
+            <ion-icon name="alert-circle-outline" class="form-icon"></ion-icon>
+            <ion-label position="stacked">Tipo de Incidente</ion-label>
+            <ion-select
+              formControlName="tipo"
+              placeholder="Selecciona el tipo de incidente"
+              interface="popover"
+              (ionChange)="actualizarColor($event.detail.value)"
+            >
+              <ion-select-option value="robo">🚨 Robo</ion-select-option>
+              <ion-select-option value="accidente">🚗 Accidente</ion-select-option>
+              <ion-select-option value="incendio">🔥 Incendio</ion-select-option>
+              <ion-select-option value="violencia">⚠️ Violencia</ion-select-option>
+              <ion-select-option value="otro">❓ Otro</ion-select-option>
+            </ion-select>
+            <div class="color-circle" [ngStyle]="{ 'background-color': colorSeleccionado }"></div>
+          </ion-item>
 
           <ion-item>
+            <ion-icon name="create-outline" class="form-icon"></ion-icon>
             <ion-label position="stacked">Descripción del Incidente</ion-label>
             <ion-textarea formControlName="descripcion" placeholder="Escribe tu comentario aquí..." rows="4"></ion-textarea>
           </ion-item>
+          
           <ion-item>
+            <ion-icon name="location-outline" class="form-icon"></ion-icon>
             <ion-label position="stacked">Ubicación del Incidente</ion-label>
             <ion-input formControlName="ubicacion" placeholder="Obteniendo ubicación..." type="text" readonly></ion-input>
           </ion-item>
           
-          <ion-button expand="full" type="submit" class="btnReporte">Enviar Reporte</ion-button>
+          <ion-button expand="full" type="submit" class="btnReporte">
+            <ion-icon name="send-outline" slot="start"></ion-icon>
+            Enviar Reporte
+          </ion-button>
         </form>
       </ion-card-content>
     </ion-card>

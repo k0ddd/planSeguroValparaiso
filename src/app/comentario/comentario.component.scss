@@ -4,11 +4,13 @@ ion-header {
   }
 
 ion-card {
-    margin: 16px; /* Agrega un margen para separar las tarjetas */
-    border-radius: 10px; /* Mantén las esquinas redondeadas */
-    box-shadow: 0px 4px 6px rgba(11, 11, 11, 0.566); /* Sombreado suave */
-    background-color: #ffffff; /* Asegúrate de que el fondo sea blanco */
-  }
+  margin: 16px; /* Agrega un margen para separar las tarjetas */
+  border-radius: 10px; /* Mantén las esquinas redondeadas */
+  box-shadow: 0px 4px 6px rgba(11, 11, 11, 0.566); /* Sombreado suave */
+  // 🔧 CAMBIAR el fondo para que coincida con el formulario
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  border: 1px solid #e0e0e0;
+}
   
 ion-textarea {
     margin-top: 8px;
@@ -66,4 +68,121 @@ img {
   --padding-start: 4px;
   --padding-end: 4px;
   color: var(--ion-color-danger); /* Color correcto de Ionic */
+}
+
+// 🔧 AGREGAR estilos para que el texto se vea bien en las tarjetas
+.reporte-card {
+  transition: all 0.3s ease;
+  color: #1a1a1a; // Asegurar que el texto sea oscuro
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  }
+}
+
+// 🔧 ASEGURAR que el contenido de las tarjetas sea legible
+.reporte-card ion-card-content {
+  color: #1a1a1a;
+}
+
+.reporte-card ion-card-title {
+  color: #1a1a1a;
+}
+
+.titulo-con-icono {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icono-tipo {
+  font-size: 18px;
+}
+
+.icono-ubicacion {
+  font-size: 16px;
+  color: #3880ff;
+  margin-right: 4px;
+}
+
+// Colores sutiles por tipo
+.tipo-robo {
+  border-left: 3px solid #e74c3c;
+  .icono-tipo { color: #e74c3c; }
+}
+
+.tipo-accidente {
+  border-left: 3px solid #f39c12;
+  .icono-tipo { color: #f39c12; }
+}
+
+.tipo-incendio {
+  border-left: 3px solid #e67e22;
+  .icono-tipo { color: #e67e22; }
+}
+
+.tipo-violencia {
+  border-left: 3px solid #9b59b6;
+  .icono-tipo { color: #9b59b6; }
+}
+
+.tipo-otro {
+  border-left: 3px solid #34495e;
+  .icono-tipo { color: #34495e; }
+}
+
+// 🔧 CAMBIAR solo estos estilos del formulario con colores invertidos
+.formulario-card {
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  color: #1a1a1a;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e0e0e0;
+}
+
+.form-item {
+  --background: rgba(0, 0, 0, 0.02);
+  --color: #1a1a1a;
+  --border-color: rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.form-icon {
+  font-size: 20px;
+  color: #666666;
+  margin-right: 12px;
+}
+
+.form-item ion-label {
+  --color: #1a1a1a;
+  font-weight: 500;
+}
+
+.form-item ion-input,
+.form-item ion-textarea,
+.form-item ion-select {
+  --color: #1a1a1a;
+  --placeholder-color: rgba(0, 0, 0, 0.5);
+}
+
+.btnReporte-mejorado {
+  --background: linear-gradient(45deg, #1a1a1a, #333333);
+  --color: #ffffff;
+  --border-radius: 12px;
+  height: 50px;
+  font-weight: 600;
+  font-size: 16px;
+  margin-top: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border: 1px solid #333333;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    --background: linear-gradient(45deg, #333333, #444444);
+  }
 }
