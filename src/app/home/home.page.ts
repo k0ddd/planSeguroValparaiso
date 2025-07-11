@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
 import 'leaflet.heat';
 import 'leaflet-routing-machine';
-
+import { AlertController } from '@ionic/angular';
 import { ReporteService } from '../services/reporte.service';
 
 import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
@@ -128,7 +128,8 @@ export class HomePage implements OnInit, AfterViewInit { // 🔧 Implementar Aft
     private router: Router,
     private menu: MenuController,
     private fb: FormBuilder,
-    private reporteService: ReporteService
+    private reporteService: ReporteService,
+    private alertController: AlertController
   ) {
     this.reporteForm = this.fb.group({
       tipo: [''],
@@ -466,6 +467,16 @@ this.routingControl = routingControl;
     }
   }
 
+  async presentSuccessAlert() {
+  const alert = await this.alertController.create({
+    header: 'Éxito',
+    message: 'Reporte enviado con éxito.',
+    buttons: ['OK']
+  });
+
+  await alert.present();
+}
+
 obtenerUbicacionActual() {
   if (navigator.geolocation) {
     console.log('Intentando obtener ubicación...');
@@ -534,7 +545,7 @@ obtenerUbicacionActual() {
             this.reporteService.crearReporte(nuevoReporte).subscribe({
               next: (res) => {
                 console.log('Reporte enviado:', res);
-                alert('Reporte enviado con éxito.');
+                  this.presentSuccessAlert();
 
                 // Agregar punto al mapa de calor inmediatamente
                 if (!this.heatLayersByTipo[tipo]) {
