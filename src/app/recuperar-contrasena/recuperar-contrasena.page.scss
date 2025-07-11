@@ -1,11 +1,12 @@
 .page-background {
-  --background: linear-gradient(177deg,rgba(255, 240, 240, 1) 0%, rgba(26, 26, 26, 1) 100%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 16px;
-    height: 100%;
-  }
+  background: #020024;
+  --background: linear-gradient(90deg, rgb(255, 255, 255) 35%, rgb(252, 252, 252) 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+  height: 100%;
+}
   
   ion-card {
     background: transparent;
@@ -100,11 +101,12 @@
     border: none !important;
   }
   
-  .plan-text {
-  color: #1ad8d2; /* Morado */
-  }
-  
-  .valparaiso-text {
-    color: #000000; /* Negro */
-  }
-  
+.plan-text {
+  color: #045d86; 
+  font-size: 30px;
+}
+
+.valparaiso-text {
+  color: #000000;
+  font-size: 30px;
+}
