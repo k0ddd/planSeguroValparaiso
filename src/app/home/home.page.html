@@ -25,7 +25,10 @@
           <!-- 🔧 AGREGAR iconos a los campos -->
           <ion-item>
             <ion-icon name="alert-circle-outline" class="form-icon"></ion-icon>
-            <ion-label position="stacked">Tipo de Incidente</ion-label>
+            <div class="label-with-circle">
+              <ion-label position="stacked">Tipo de Incidente</ion-label>
+              <div class="color-circle" [ngStyle]="{ 'background-color': colorSeleccionado }"></div>
+            </div>
             <ion-select
               formControlName="tipo"
               placeholder="Selecciona el tipo de incidente"
@@ -38,7 +41,6 @@
               <ion-select-option value="violencia">⚠️ Violencia</ion-select-option>
               <ion-select-option value="otro">❓ Otro</ion-select-option>
             </ion-select>
-            <div class="color-circle" [ngStyle]="{ 'background-color': colorSeleccionado }"></div>
           </ion-item>
 
           <ion-item>

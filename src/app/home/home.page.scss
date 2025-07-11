@@ -162,28 +162,60 @@ ion-card-content {
 
 ion-item {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: center; // Centrar verticalmente
+  justify-content: flex-start; // Alinear a la izquierda
+  min-height: 60px; // Altura mínima consistente
+  padding: 8px 16px;
 }
 
 .form-icon {
   font-size: 20px;
   color: #666666;
   margin-right: 12px;
+  align-self: center; // Centrar el icono
 }
 
-// 🔧 ARREGLAR posición del círculo de color
+ion-label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex-grow: 1;
+}
+
+ion-select,
+ion-input,
+ion-textarea {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+}
+
+/* Botón para reporte */
+.btnReporte {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  margin-top: 16px;
+  
+  ion-icon {
+    margin-right: 8px;
+  }
+}
+
+/* Define el estilo para el círculo de color */
 .color-circle {
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   border: 2px solid #e0e0e0;
   transition: all 0.2s ease;
   flex-shrink: 0;
-  // 🔧 CORREGIR posición
+  
+  // 🔧 POSICIÓN ABSOLUTA para que no moleste
   position: absolute;
-  right: 16px;
+  right: 12px;
   top: 50%;
   transform: translateY(-50%);
   
@@ -193,18 +225,18 @@ ion-item {
   }
 }
 
-// 🔧 AGREGAR posición relativa al ion-item
+// 🔧 PREPARAR el ion-item para la pelotita
 ion-item:has(.color-circle) {
   position: relative;
-  padding-right: 50px; // Espacio para el círculo
+  padding-right: 40px; // Espacio para la pelotita
 }
 
-// 🔧 AGREGAR espacio extra para el ion-select
-ion-item ion-select {
-  padding-right: 40px; // 🔧 AGREGAR padding derecho para dejar espacio
+// 🔧 ASEGURAR que el select no se superponga
+ion-item:has(.color-circle) ion-select {
+  padding-right: 30px;
 }
 
-// 🔧 MEJORAR el ion-item que contiene el select
+/* MEJORAR el contenedor del tipo de incidente */
 ion-item:has(.color-circle) {
   display: flex;
   align-items: center;
@@ -269,5 +301,26 @@ ion-item:has(.color-circle) {
       transform: scale(1.1);
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
+  }
+}
+
+// 🔧 CONTENEDOR para label + pelotita
+.label-with-circle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  ion-label {
+    margin: 0;
+  }
+  
+  .color-circle {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    border: 1px solid #e0e0e0;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
   }
 }
