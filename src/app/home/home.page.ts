@@ -333,15 +333,26 @@ private obtenerGradientePorTipo(tipo: string) {
 
     this.map.addControl(searchControl);
 
-    // 📍 Evento personalizado al seleccionar resultado
-    this.map.on('geosearch/showlocation', (result: any) => {
-      const destino = result.location;
-      if (this.ubicacionActual) {
-        this.trazarRuta(this.ubicacionActual, L.latLng(destino.y, destino.x));
-      } else {
-        alert('Ubicación actual no disponible.');
-      }
-    });
+this.map.on('geosearch/showlocation', (result: any) => {
+  const destino = result.location;
+
+  const destinoLatLng = L.latLng(destino.y, destino.x);
+
+  // Icono personalizado para destino
+  const destinoIcon = L.icon({
+    iconUrl: 'assets/icon/ubi.svg', // 🔁 Usa el ícono que prefieras
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+  });
+
+  // Agregar marcador de destino
+  const destinoMarker = L.marker(destinoLatLng, { icon: destinoIcon }).addTo(this.map);
+  destinoMarker.bindPopup('Destino seleccionado').openPopup();
+
+  // Centrar el mapa en el destino
+  this.map.setView(destinoLatLng, 16);
+});
 
     // 🔥 CARGAR REPORTES REALES DESDE LA BASE DE DATOS
     setTimeout(() => {
